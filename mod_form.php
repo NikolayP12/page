@@ -25,12 +25,17 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->dirroot.'/course/moodleform_mod.php');
-require_once($CFG->dirroot.'/mod/page/locallib.php');
-require_once($CFG->libdir.'/filelib.php');
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
+require_once($CFG->dirroot . '/mod/page/locallib.php');
+require_once($CFG->libdir . '/filelib.php');
 
-class mod_page_mod_form extends moodleform_mod {
-    function definition() {
+global $PAGE;
+$PAGE->requires->js(new moodle_url('/mod/page/dropdown.js'));
+
+class mod_page_mod_form extends moodleform_mod
+{
+    function definition()
+    {
         global $CFG, $DB;
 
         $mform = $this->_form;
@@ -39,7 +44,7 @@ class mod_page_mod_form extends moodleform_mod {
 
         //-------------------------------------------------------
         $mform->addElement('header', 'general', get_string('general', 'form'));
-        $mform->addElement('text', 'name', get_string('name'), array('size'=>'48'));
+        $mform->addElement('text', 'name', get_string('name'), array('size' => '48'));
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
         } else {
@@ -55,6 +60,38 @@ class mod_page_mod_form extends moodleform_mod {
         $mform->addRule('page', get_string('required'), 'required', null, 'client');
 
         //-------------------------------------------------------
+        // Aquí va añadido el desplegable para los modulos de actividad.
+
+        // Añadimos el desplegable de tipos de módulo
+        $module_types = core_component::get_plugin_list('mod');
+        $module_types_options = ['' => get_string('selecttype', 'page')]; // Opción inicial
+        foreach ($module_types as $module_type => $notused) {
+            // Usamos el nombre del módulo como etiqueta. Asumiendo que 'modulename' es una cadena en el archivo de idioma.
+            $module_types_options[$module_type] = get_string('pluginname', 'mod_' . $module_type);
+        }
+
+        // Añadir el desplegable al formulario.
+        $mform->addElement('select', 'moduletype', get_string('moduletype', 'page'), $module_types_options);
+        $mform->setType('moduletype', PARAM_ALPHANUMEXT);
+        $mform->setDefault('moduletype', '');
+
+        // En este punto, estamos preparando el array $options para el desplegable de módulos.
+        // Inicialmente, este desplegable estará vacío hasta que se implemente la lógica JS para llenarlo dinámicamente.
+        $options = []; // Inicialmente establece $options vacío; será actualizado dinámicamente via JS
+
+        // Preparar el elemento a repetir (en este caso, un desplegable vacío inicialmente)
+        $repeatArray = array();
+        $repeatArray[] = $mform->createElement('select', 'associatedmoduleid', get_string('selectmodule', 'page'), $options);
+
+        // Opciones para el botón de repetición
+        $repeatOptions = array();
+        $repeatOptions['associatedmoduleid']['default'] = ''; // Valor predeterminado vacío
+
+        // Añadir elementos repetibles al formulario
+        $this->repeat_elements($repeatArray, 1, $repeatOptions, 'option_repeats', 'option_add_fields', 1, get_string('addmodule', 'page'), true);
+
+        //-------------------------------------------------------
+
         $mform->addElement('header', 'appearancehdr', get_string('appearance'));
 
         if ($this->current->instance) {
@@ -73,14 +110,14 @@ class mod_page_mod_form extends moodleform_mod {
         }
 
         if (array_key_exists(RESOURCELIB_DISPLAY_POPUP, $options)) {
-            $mform->addElement('text', 'popupwidth', get_string('popupwidth', 'page'), array('size'=>3));
+            $mform->addElement('text', 'popupwidth', get_string('popupwidth', 'page'), array('size' => 3));
             if (count($options) > 1) {
                 $mform->hideIf('popupwidth', 'display', 'noteq', RESOURCELIB_DISPLAY_POPUP);
             }
             $mform->setType('popupwidth', PARAM_INT);
             $mform->setDefault('popupwidth', $config->popupwidth);
 
-            $mform->addElement('text', 'popupheight', get_string('popupheight', 'page'), array('size'=>3));
+            $mform->addElement('text', 'popupheight', get_string('popupheight', 'page'), array('size' => 3));
             if (count($options) > 1) {
                 $mform->hideIf('popupheight', 'display', 'noteq', RESOURCELIB_DISPLAY_POPUP);
             }
@@ -95,8 +132,10 @@ class mod_page_mod_form extends moodleform_mod {
 
         // add legacy files flag only if used
         if (isset($this->current->legacyfiles) and $this->current->legacyfiles != RESOURCELIB_LEGACYFILES_NO) {
-            $options = array(RESOURCELIB_LEGACYFILES_DONE   => get_string('legacyfilesdone', 'page'),
-                             RESOURCELIB_LEGACYFILES_ACTIVE => get_string('legacyfilesactive', 'page'));
+            $options = array(
+                RESOURCELIB_LEGACYFILES_DONE   => get_string('legacyfilesdone', 'page'),
+                RESOURCELIB_LEGACYFILES_ACTIVE => get_string('legacyfilesactive', 'page')
+            );
             $mform->addElement('select', 'legacyfiles', get_string('legacyfiles', 'page'), $options);
             $mform->setAdvanced('legacyfiles', 1);
         }
@@ -119,12 +158,20 @@ class mod_page_mod_form extends moodleform_mod {
      * @param array $defaultvalues Form defaults
      * @return void
      **/
-    public function data_preprocessing(&$defaultvalues) {
+    public function data_preprocessing(&$defaultvalues)
+    {
         if ($this->current->instance) {
             $draftitemid = file_get_submitted_draft_itemid('page');
             $defaultvalues['page']['format'] = $defaultvalues['contentformat'];
-            $defaultvalues['page']['text']   = file_prepare_draft_area($draftitemid, $this->context->id, 'mod_page',
-                    'content', 0, page_get_editor_options($this->context), $defaultvalues['content']);
+            $defaultvalues['page']['text']   = file_prepare_draft_area(
+                $draftitemid,
+                $this->context->id,
+                'mod_page',
+                'content',
+                0,
+                page_get_editor_options($this->context),
+                $defaultvalues['content']
+            );
             $defaultvalues['page']['itemid'] = $draftitemid;
         }
         if (!empty($defaultvalues['displayoptions'])) {
@@ -144,4 +191,3 @@ class mod_page_mod_form extends moodleform_mod {
         }
     }
 }
-
