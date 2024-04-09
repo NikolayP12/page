@@ -27,7 +27,7 @@
         <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
       </INDEXES>
     </TABLE>
-    <TABLE name="page_associated_modules">
+    <TABLE NAME="page_associated_modules" COMMENT="Each record is a module associated to the page">
       <FIELDS>
           <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
           <FIELD NAME="pageid" TYPE="int" LENGTH="10" NOTNULL="true"/>
