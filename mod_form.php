@@ -24,19 +24,18 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 require_once($CFG->dirroot . '/mod/page/locallib.php');
 require_once($CFG->libdir . '/filelib.php');
 
-global $PAGE;
-$PAGE->requires->js(new moodle_url('/mod/page/dropdown.js'));
-
+global $COURSE;
 class mod_page_mod_form extends moodleform_mod
 {
     function definition()
     {
         global $CFG, $DB;
+        global $PAGE;
+        $PAGE->requires->js(new moodle_url('/mod/page/dropdown.js'));
 
         $mform = $this->_form;
 
@@ -60,7 +59,8 @@ class mod_page_mod_form extends moodleform_mod
         $mform->addRule('page', get_string('required'), 'required', null, 'client');
 
         //-------------------------------------------------------
-        // Aquí va añadido el desplegable para los modulos de actividad.
+
+        $idcourse = required_param('course', PARAM_INT);
 
         // Añadimos el desplegable de tipos de módulo
         $module_types = core_component::get_plugin_list('mod');

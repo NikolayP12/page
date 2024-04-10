@@ -4,14 +4,14 @@ require_once('../../config.php');
 require_login();
 $context = context_system::instance();
 global $COURSE;
-
 // Asegúrate de validar los permisos del usuario para esta operación.
 if (!has_capability('moodle/course:manageactivities', $context)) {
     throw new moodle_exception('nopermissions', 'error', '', 'manage activities');
 }
 
 $type = required_param('type', PARAM_PLUGIN); // Asegúrate de validar y sanear el tipo de módulo.
-$courseid = $COURSE->id;
+$courseid = required_param('courseid', PARAM_INT); // Asegúrate de validar y sanear el id de módulo.
+
 global $DB, $CFG;
 require_once($CFG->dirroot . '/course/lib.php');
 
@@ -33,6 +33,17 @@ if ($type) {
         }
     }
 }
+$debug_info = [
+    'type_received' => $type,
+    'activities' => $activities,
+    'courseid' => $courseid,
+    'courseid' =>  $COURSE->fullname,
+    // Añadir más información de depuración si es necesario
+];
 
 header('Content-Type: application/json');
-echo json_encode($activities);
+echo json_encode([
+    'data' => $activities,
+    'debug' => $debug_info,
+]);
+exit;

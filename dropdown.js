@@ -1,14 +1,24 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     var moduleTypeSelect = document.getElementById('id_moduletype'); // moduletype es el ID del select del formulario para el tipo de modulo
+
+    // Función para obtener el valor de un parámetro específico de la URL
+
+    function getQueryParam(param) {
+        var urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    var courseId = getQueryParam('course');
+
     moduleTypeSelect.addEventListener('change', function () {
         // Obtener el tipo de módulo seleccionado
         var type = this.value;
+
         if (type) {
             // La URL debe apuntar a un script de PHP en tu servidor que pueda responder a la solicitud AJAX.
-            // La ruta debe ser relativa a la raíz de tu instalación de Moodle.
-            var ajaxurl = M.cfg.wwwroot + '/mod/page/get_activities.php?type=' + encodeURIComponent(type);
-
-            // Realizar la solicitud AJAX
+            var ajaxurl = M.cfg.wwwroot + '/mod/page/get_activities.php?type=' + encodeURIComponent(type) + '&courseid=' + courseId;
+            console.log('Entro a dropdown.js y el AJAX URL es:', ajaxurl);
             fetch(ajaxurl)
                 .then(response => {
                     if (!response.ok) {
@@ -16,8 +26,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     return response.json();
                 })
-                .then(activities => {
+                .then(response => {
                     // Obtener todos los selects de 'associatedmoduleid' del DOM
+                    console.log('Respuesta del servidor (get_activities):', response.debug); // Muestra la información de depuración en la consola.
+                    var activities = response.data; // Asegúrate de utilizar la parte 'data' de la respuesta.
+
                     var selects = document.querySelectorAll('select[name^="associatedmoduleid"]');
 
                     // Actualizar cada select con las nuevas actividades
