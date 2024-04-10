@@ -3,21 +3,21 @@
 require_once('../../config.php');
 require_login();
 $context = context_system::instance();
-global $COURSE;
-// Asegúrate de validar los permisos del usuario para esta operación.
+global $COURSE, $DB, $CFG;
+
+// Verifica que el usuario tenga los permisos necesarios para gestionar actividades.
 if (!has_capability('moodle/course:manageactivities', $context)) {
     throw new moodle_exception('nopermissions', 'error', '', 'manage activities');
 }
 
-$type = required_param('type', PARAM_PLUGIN); // Asegúrate de validar y sanear el tipo de módulo.
-$courseid = required_param('courseid', PARAM_INT); // Asegúrate de validar y sanear el id de módulo.
+$type = required_param('type', PARAM_PLUGIN); // Valida y sanea el tipo de módulo.
+$courseid = required_param('courseid', PARAM_INT); // Valida y sanea el ID del curso.
 
-global $DB, $CFG;
 require_once($CFG->dirroot . '/course/lib.php');
 
 $activities = [];
 
-// Asegúrate de ajustar esta consulta para recuperar las actividades del tipo especificado.
+// Ajusta la consulta para recuperar las actividades del tipo especificado.
 if ($type) {
     $modinfo = get_fast_modinfo($courseid);
     $cms = $modinfo->get_cms();
@@ -37,7 +37,6 @@ $debug_info = [
     'type_received' => $type,
     'activities' => $activities,
     'courseid' => $courseid,
-    'courseid' =>  $COURSE->fullname,
     // Añadir más información de depuración si es necesario
 ];
 

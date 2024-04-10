@@ -60,8 +60,6 @@ class mod_page_mod_form extends moodleform_mod
 
         //-------------------------------------------------------
 
-        $idcourse = required_param('course', PARAM_INT);
-
         // Añadimos el desplegable de tipos de módulo
         $module_types = core_component::get_plugin_list('mod');
         $module_types_options = ['' => get_string('selecttype', 'page')]; // Opción inicial
@@ -75,20 +73,14 @@ class mod_page_mod_form extends moodleform_mod
         $mform->setType('moduletype', PARAM_ALPHANUMEXT);
         $mform->setDefault('moduletype', '');
 
-        // En este punto, estamos preparando el array $options para el desplegable de módulos.
-        // Inicialmente, este desplegable estará vacío hasta que se implemente la lógica JS para llenarlo dinámicamente.
-        $options = []; // Inicialmente establece $options vacío; será actualizado dinámicamente via JS
+        // Añadir el desplegable para las instancias del módulo (se actualizará dinámicamente)
+        $mform->addElement('select', 'moduleinstance', get_string('selectmodule', 'page'), []);
+        $mform->setType('moduleinstance', PARAM_INT);
+        $mform->disabledIf('moduleinstance', 'moduletype', 'eq', '');
 
-        // Preparar el elemento a repetir (en este caso, un desplegable vacío inicialmente)
-        $repeatArray = array();
-        $repeatArray[] = $mform->createElement('select', 'associatedmoduleid', get_string('selectmodule', 'page'), $options);
+        // Contenedor para los módulos seleccionados
+        $mform->addElement('static', 'selectedmodules', get_string('selectedmodules', 'page'), '<div id="selected-modules-container"></div>');
 
-        // Opciones para el botón de repetición
-        $repeatOptions = array();
-        $repeatOptions['associatedmoduleid']['default'] = ''; // Valor predeterminado vacío
-
-        // Añadir elementos repetibles al formulario
-        $this->repeat_elements($repeatArray, 1, $repeatOptions, 'option_repeats', 'option_add_fields', 1, get_string('addmodule', 'page'), true);
 
         //-------------------------------------------------------
 

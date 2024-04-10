@@ -78,8 +78,10 @@ $string['printheading'] = 'Display page name';
 $string['printheadingexplain'] = 'Display page name above content?';
 
 $string['moduletype'] = 'Module type';
+$string['moduleselection'] = 'Module selection';
 $string['selectmodule'] = 'Select module';
 $string['selecttype'] = 'Select a type';
+$string['selectedmodules'] = 'Selected modules';
 $string['selectactivity'] = 'Select an activity';
 $string['addmodule'] = 'Add module';
 $string['mod_assignment'] = 'Assignment';
