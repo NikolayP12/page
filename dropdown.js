@@ -48,20 +48,48 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    function removeSelectedModule(element) {
+        element.parentNode.removeChild(element);
+    }
+
     // Manejar la selección de una instancia de módulo
     moduleInstanceSelect.addEventListener('change', function () {
         var moduleId = this.value;
         var moduleName = this.options[this.selectedIndex].text;
 
-        if (moduleId) {
+        /*if (moduleId) {
             // Agregar visualmente el módulo al contenedor de módulos seleccionados
             var selectedModule = document.createElement('div');
             selectedModule.textContent = moduleName;
             selectedModule.setAttribute('data-module-id', moduleId);
             selectedModulesContainer.appendChild(selectedModule);
 
+
             // Limpiar el desplegable de instancias de módulo para una nueva selección
             this.value = ''; // Esto puede depender de cómo quieres gestionar la UI
+        }*/
+
+        if (moduleId) {
+            // Crear div para el módulo seleccionado
+            var selectedModule = document.createElement('div');
+            selectedModule.className = 'selected-module';
+            selectedModule.textContent = moduleName;
+            selectedModule.setAttribute('data-module-id', moduleId);
+
+            // Crear y agregar el botón de eliminar
+            var deleteButton = document.createElement('button');
+            deleteButton.textContent = 'x';
+            deleteButton.className = 'delete-module-button';
+            deleteButton.type = 'button'; // Asegurar que no envíe el formulario
+            deleteButton.onclick = function () {
+                selectedModulesContainer.removeChild(selectedModule);
+            };
+            selectedModule.appendChild(deleteButton);
+
+            selectedModulesContainer.appendChild(selectedModule);
+
+            // Restablecer el desplegable
+            this.value = '';
         }
     });
 });
