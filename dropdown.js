@@ -2,12 +2,23 @@ document.addEventListener('DOMContentLoaded', function () {
     var moduleTypeSelect = document.getElementById('id_moduletype');
     var moduleInstanceSelect = document.getElementById('id_moduleinstance');
     var selectedModulesContainer = document.getElementById('selected-modules-container');
-    var selectedModuleId = [];
+    var hiddenSelectedModuleIds = document.getElementById('selectedmoduleids');
+    var arraySelectedModuleId = [];
 
     // Función para obtener el valor de un parámetro específico de la URL
     function getQueryParam(param) {
         var urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
+    }
+
+    function updateHiddenField() {
+        if (hiddenSelectedModuleIds) { // Asegurarse de que el elemento existe
+            hiddenSelectedModuleIds.value = arraySelectedModuleId.join(',');
+            console.log('Hidden field updated:', hiddenSelectedModuleIds.value);
+            console.log('Array elements:', arraySelectedModuleId);
+        } else {
+            console.error('Hidden field not found');
+        }
     }
 
     var courseId = getQueryParam('course');
@@ -54,10 +65,11 @@ document.addEventListener('DOMContentLoaded', function () {
         var moduleId = this.value;
         var moduleName = this.options[this.selectedIndex].text;
 
-        if (moduleId && !selectedModuleId.includes(moduleId)) {
-            console.log(selectedModuleId);
-            // Crear div para el módulo seleccionado
-            selectedModuleId.push(moduleId);
+        if (moduleId && !arraySelectedModuleId.includes(moduleId)) {
+            console.log(arraySelectedModuleId);
+            arraySelectedModuleId.push(moduleId);
+            updateHiddenField();
+
             var selectedModule = document.createElement('div');
             selectedModule.className = 'selected-module';
             selectedModule.textContent = moduleName;
@@ -70,19 +82,20 @@ document.addEventListener('DOMContentLoaded', function () {
             deleteButton.type = 'button'; // Asegurar que no envíe el formulario
             deleteButton.onclick = function () {
                 selectedModulesContainer.removeChild(selectedModule);
-                selectedModuleId = selectedModuleId.filter(function (id) {
+                arraySelectedModuleId = arraySelectedModuleId.filter(function (id) {
                     return id !== moduleId;
-
                 });
+                updateHiddenField();
                 this.value = '';
             };
+            updateHiddenField();
             selectedModule.appendChild(deleteButton);
             selectedModulesContainer.appendChild(selectedModule);
 
             // Restablecer el desplegable
             this.value = '';
         }
-        this.value = '';
 
+        this.value = '';
     });
 });

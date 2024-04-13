@@ -39,6 +39,5 @@
           <KEY NAME="pageid_fk" TYPE="foreign" FIELDS="pageid" REFTABLE="page" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-
   </TABLES>
 </XMLDB>

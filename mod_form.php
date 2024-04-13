@@ -79,9 +79,10 @@ class mod_page_mod_form extends moodleform_mod
         $mform->setType('moduleinstance', PARAM_INT);
         $mform->disabledIf('moduleinstance', 'moduletype', 'eq', '');
 
-        // Contenedor para los módulos seleccionados
         $mform->addElement('static', 'selectedmodules', get_string('selectedmodules', 'page'), '<div id="selected-modules-container"></div>');
-
+        // Contenedores para los módulos seleccionados.
+        $mform->addElement('static', 'selectedmoduleids', '', '<div id="selectedmoduleids"></div>');
+        $mform->setType('selectedmoduleids', PARAM_SEQUENCE); // Use PARAM_SEQUENCE for comma-separated integers.
 
         //-------------------------------------------------------
 
