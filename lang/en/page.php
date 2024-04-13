@@ -103,3 +103,5 @@ $string['mod_survey'] = 'Survey';
 $string['mod_url'] = 'URL';
 $string['mod_wiki'] = 'Wiki';
 $string['mod_workshop'] = 'Workshop';
+
+$string['alert_selected_module'] = 'This module has been selected';

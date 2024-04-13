@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var moduleTypeSelect = document.getElementById('id_moduletype');
     var moduleInstanceSelect = document.getElementById('id_moduleinstance');
     var selectedModulesContainer = document.getElementById('selected-modules-container');
+    var selectedModuleId = [];
 
     // Función para obtener el valor de un parámetro específico de la URL
     function getQueryParam(param) {
@@ -48,29 +49,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    function removeSelectedModule(element) {
-        element.parentNode.removeChild(element);
-    }
-
     // Manejar la selección de una instancia de módulo
     moduleInstanceSelect.addEventListener('change', function () {
         var moduleId = this.value;
         var moduleName = this.options[this.selectedIndex].text;
 
-        /*if (moduleId) {
-            // Agregar visualmente el módulo al contenedor de módulos seleccionados
-            var selectedModule = document.createElement('div');
-            selectedModule.textContent = moduleName;
-            selectedModule.setAttribute('data-module-id', moduleId);
-            selectedModulesContainer.appendChild(selectedModule);
-
-
-            // Limpiar el desplegable de instancias de módulo para una nueva selección
-            this.value = ''; // Esto puede depender de cómo quieres gestionar la UI
-        }*/
-
-        if (moduleId) {
+        if (moduleId && !selectedModuleId.includes(moduleId)) {
+            console.log(selectedModuleId);
             // Crear div para el módulo seleccionado
+            selectedModuleId.push(moduleId);
             var selectedModule = document.createElement('div');
             selectedModule.className = 'selected-module';
             selectedModule.textContent = moduleName;
@@ -78,18 +65,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Crear y agregar el botón de eliminar
             var deleteButton = document.createElement('button');
-            deleteButton.textContent = 'x';
+            deleteButton.textContent = '×';
             deleteButton.className = 'delete-module-button';
             deleteButton.type = 'button'; // Asegurar que no envíe el formulario
             deleteButton.onclick = function () {
                 selectedModulesContainer.removeChild(selectedModule);
+                selectedModuleId = selectedModuleId.filter(function (id) {
+                    return id !== moduleId;
+
+                });
+                this.value = '';
             };
             selectedModule.appendChild(deleteButton);
-
             selectedModulesContainer.appendChild(selectedModule);
 
             // Restablecer el desplegable
             this.value = '';
         }
+        this.value = '';
+
     });
 });

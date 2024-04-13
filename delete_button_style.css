@@ -28,10 +28,10 @@
     height: 20px;
     /* Establece una altura fija para el botón */
     display: flex;
-    margin-top: 3px;
+    margin-top: 1px;
     justify-content: center;
     align-items: center;
-    font-size: 10px;
+    font-size: 14px;
     font-weight: bold;
     /* Ajusta el tamaño de la fuente de la 'x' si es necesario */
     line-height: 1;
