@@ -43,7 +43,7 @@ class mod_page_mod_form extends moodleform_mod
         $config = get_config('page');
 
         //-------------------------------------------------------
-        // Añado un elemento oculto que contendrá el id del curso.
+        // Hiddden element that offers the course ID.
         $mform->addElement('hidden', 'courseid', $this->current->course, '<div id="courseid"></div>');
         $mform->setType('courseid', PARAM_INT);
 
