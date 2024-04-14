@@ -100,6 +100,12 @@ class mod_page_mod_form extends moodleform_mod
         $mform->addElement('editor', 'learningpath_editor', get_string('learningpath', 'page'), null, page_get_editor_options($this->context));
         $mform->addRule('learningpath_editor', get_string('required'), 'required', null, 'client');
 
+
+        //-------------------------------------------------------
+        // Campo para la ruta de aprendizaje de los modulos
+
+
+
         //-------------------------------------------------------
 
         $mform->addElement('header', 'appearancehdr', get_string('appearance'));
