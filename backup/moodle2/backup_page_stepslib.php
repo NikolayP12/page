@@ -31,9 +31,11 @@ defined('MOODLE_INTERNAL') || die;
 /**
  * Define the complete page structure for backup, with file and id annotations
  */
-class backup_page_activity_structure_step extends backup_activity_structure_step {
+class backup_page_activity_structure_step extends backup_activity_structure_step
+{
 
-    protected function define_structure() {
+    protected function define_structure()
+    {
 
         // To know if we are including userinfo
         $userinfo = $this->get_setting_value('userinfo');
@@ -42,7 +44,8 @@ class backup_page_activity_structure_step extends backup_activity_structure_step
         $page = new backup_nested_element('page', array('id'), array(
             'name', 'intro', 'introformat', 'content', 'contentformat',
             'legacyfiles', 'legacyfileslast', 'display', 'displayoptions',
-            'revision', 'timemodified'));
+            'revision', 'timemodified', 'learningpath', 'learningpathformat'
+        ));
 
         // Build the tree
         // (love this)
@@ -56,6 +59,8 @@ class backup_page_activity_structure_step extends backup_activity_structure_step
         // Define file annotations
         $page->annotate_files('mod_page', 'intro', null); // This file areas haven't itemid
         $page->annotate_files('mod_page', 'content', null); // This file areas haven't itemid
+        $page->annotate_files('mod_page', 'learningpath', null);
+
 
         // Return the root element (page), wrapped into standard activity structure
         return $this->prepare_activity_structure($page);
