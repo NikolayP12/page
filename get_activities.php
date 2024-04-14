@@ -12,6 +12,7 @@ if (!has_capability('moodle/course:manageactivities', $context)) {
 
 $type = required_param('type', PARAM_PLUGIN); // Valida y sanea el tipo de módulo.
 $courseid = required_param('courseid', PARAM_INT); // Valida y sanea el ID del curso.
+//error_log('Id del curso con COURSE->id: ' . $this->current->course);
 
 require_once($CFG->dirroot . '/course/lib.php');
 

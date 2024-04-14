@@ -3,25 +3,33 @@ document.addEventListener('DOMContentLoaded', function () {
     var moduleInstanceSelect = document.getElementById('id_moduleinstance');
     var selectedModulesContainer = document.getElementById('selected-modules-container');
     var hiddenSelectedModuleIds = document.getElementById('selectedmoduleids');
+    var hiddenSelectedModuleNames = document.getElementById('selectedmodulenames');
+    var courseId = document.getElementById('courseid').value;
+
+    var arraySelectedModuleName = [];
     var arraySelectedModuleId = [];
 
-    // Función para obtener el valor de un parámetro específico de la URL
-    function getQueryParam(param) {
-        var urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-    }
-
-    function updateHiddenField() {
+    function updateHiddenIdsField() {
         if (hiddenSelectedModuleIds) { // Asegurarse de que el elemento existe
-            hiddenSelectedModuleIds.value = arraySelectedModuleId.join(',');
-            console.log('Hidden field updated:', hiddenSelectedModuleIds.value);
-            console.log('Array elements:', arraySelectedModuleId);
+            hiddenSelectedModuleIds.value = arraySelectedModuleId.join(', ');
+            console.log(hiddenSelectedModuleIds.value);
         } else {
-            console.error('Hidden field not found');
+            console.error('Hidden ids field not found');
         }
     }
 
-    var courseId = getQueryParam('course');
+    function updateHiddenNamesField() {
+        if (hiddenSelectedModuleNames) { // Asegurarse de que el elemento existe
+            hiddenSelectedModuleNames.value = arraySelectedModuleName.join(', ');
+            console.log(hiddenSelectedModuleNames.value);
+        } else {
+            console.error('Hidden names field not found');
+        }
+    }
+
+    //var courseId = getQueryParam('course');
+    // var courseId = ideCurso.value;
+    // console.log(courseId);
 
     // Actualizar desplegable de instancias de módulo cuando cambie el tipo de módulo
     moduleTypeSelect.addEventListener('change', function () {
@@ -65,10 +73,12 @@ document.addEventListener('DOMContentLoaded', function () {
         var moduleId = this.value;
         var moduleName = this.options[this.selectedIndex].text;
 
-        if (moduleId && !arraySelectedModuleId.includes(moduleId)) {
-            console.log(arraySelectedModuleId);
+        if (moduleId && !arraySelectedModuleId.includes(moduleId) && !arraySelectedModuleName.includes(moduleName)) {
             arraySelectedModuleId.push(moduleId);
-            updateHiddenField();
+            arraySelectedModuleName.push(moduleName);
+
+            updateHiddenIdsField();
+            updateHiddenNamesField();
 
             var selectedModule = document.createElement('div');
             selectedModule.className = 'selected-module';
@@ -85,17 +95,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 arraySelectedModuleId = arraySelectedModuleId.filter(function (id) {
                     return id !== moduleId;
                 });
-                updateHiddenField();
+
+                arraySelectedModuleName = arraySelectedModuleName.filter(function (name) {
+                    return name !== moduleName;
+                });
+
+                updateHiddenIdsField();
+                updateHiddenNamesField();
+
                 this.value = '';
             };
-            updateHiddenField();
+
+            updateHiddenIdsField();
+            updateHiddenNamesField();
+
             selectedModule.appendChild(deleteButton);
             selectedModulesContainer.appendChild(selectedModule);
 
-            // Restablecer el desplegable
             this.value = '';
         }
-
         this.value = '';
     });
 });

@@ -43,6 +43,11 @@ class mod_page_mod_form extends moodleform_mod
         $config = get_config('page');
 
         //-------------------------------------------------------
+        // Añado un elemento oculto que contendrá el id del curso.
+        $mform->addElement('hidden', 'courseid', $this->current->course, '<div id="courseid"></div>');
+        $mform->setType('courseid', PARAM_INT);
+
+        //-------------------------------------------------------
         $mform->addElement('header', 'general', get_string('general', 'form'));
         $mform->addElement('text', 'name', get_string('name'), array('size' => '48'));
         if (!empty($CFG->formatstringstriptags)) {
@@ -60,6 +65,7 @@ class mod_page_mod_form extends moodleform_mod
         $mform->addRule('page', get_string('required'), 'required', null, 'client');
 
         //-------------------------------------------------------
+
 
         // Añadimos el desplegable de tipos de módulo
         $module_types = core_component::get_plugin_list('mod');
@@ -79,8 +85,12 @@ class mod_page_mod_form extends moodleform_mod
         $mform->setType('moduleinstance', PARAM_INT);
         $mform->disabledIf('moduleinstance', 'moduletype', 'eq', '');
 
-        $mform->addElement('static', 'selectedmodules', get_string('selectedmodules', 'page'), '<div id="selected-modules-container"></div>');
         // Contenedores para los módulos seleccionados.
+        $mform->addElement('static', 'selectedmodules', get_string('selectedmodules', 'page'), '<div id="selected-modules-container"></div>');
+
+        $mform->addElement('static', 'selectedmodulenames', '', '<div id="selectedmodulenames"></div>');
+        $mform->setType('selectedmodulenames', PARAM_TEXT);
+
         $mform->addElement('static', 'selectedmoduleids', '', '<div id="selectedmoduleids"></div>');
         $mform->setType('selectedmoduleids', PARAM_SEQUENCE); // Use PARAM_SEQUENCE for comma-separated integers.
 

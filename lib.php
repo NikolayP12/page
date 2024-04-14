@@ -28,20 +28,32 @@ defined('MOODLE_INTERNAL') || die;
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed True if module supports feature, false if not, null if doesn't know or string for the module purpose.
  */
-function page_supports($feature) {
-    switch($feature) {
-        case FEATURE_MOD_ARCHETYPE:           return MOD_ARCHETYPE_RESOURCE;
-        case FEATURE_GROUPS:                  return false;
-        case FEATURE_GROUPINGS:               return false;
-        case FEATURE_MOD_INTRO:               return true;
-        case FEATURE_COMPLETION_TRACKS_VIEWS: return true;
-        case FEATURE_GRADE_HAS_GRADE:         return false;
-        case FEATURE_GRADE_OUTCOMES:          return false;
-        case FEATURE_BACKUP_MOODLE2:          return true;
-        case FEATURE_SHOW_DESCRIPTION:        return true;
-        case FEATURE_MOD_PURPOSE:             return MOD_PURPOSE_CONTENT;
+function page_supports($feature)
+{
+    switch ($feature) {
+        case FEATURE_MOD_ARCHETYPE:
+            return MOD_ARCHETYPE_RESOURCE;
+        case FEATURE_GROUPS:
+            return false;
+        case FEATURE_GROUPINGS:
+            return false;
+        case FEATURE_MOD_INTRO:
+            return true;
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return true;
+        case FEATURE_GRADE_HAS_GRADE:
+            return false;
+        case FEATURE_GRADE_OUTCOMES:
+            return false;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
+        case FEATURE_MOD_PURPOSE:
+            return MOD_PURPOSE_CONTENT;
 
-        default: return null;
+        default:
+            return null;
     }
 }
 
@@ -50,7 +62,8 @@ function page_supports($feature) {
  * @param $data the data submitted from the reset course.
  * @return array status array
  */
-function page_reset_userdata($data) {
+function page_reset_userdata($data)
+{
 
     // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
     // See MDL-9367.
@@ -68,8 +81,9 @@ function page_reset_userdata($data) {
  *
  * @return array
  */
-function page_get_view_actions() {
-    return array('view','view all');
+function page_get_view_actions()
+{
+    return array('view', 'view all');
 }
 
 /**
@@ -82,7 +96,8 @@ function page_get_view_actions() {
  *
  * @return array
  */
-function page_get_post_actions() {
+function page_get_post_actions()
+{
     return array('update', 'add');
 }
 
@@ -92,7 +107,8 @@ function page_get_post_actions() {
  * @param mod_page_mod_form $mform
  * @return int new page instance id
  */
-function page_add_instance($data, $mform = null) {
+function page_add_instance($data, $mform = null)
+{
     global $CFG, $DB;
     require_once("$CFG->libdir/resourcelib.php");
 
@@ -112,11 +128,22 @@ function page_add_instance($data, $mform = null) {
         $data->content       = $data->page['text'];
         $data->contentformat = $data->page['format'];
     }
+    // Nuevo: Añadir los datos de los módulos seleccionados.
+
+    // if (isset($data->selectedmoduleids)) {
+    //     // Asumiendo que 'selectedmoduleids' es un arreglo de IDs como cadena, separados por comas
+    //     $data->selectedmoduleids = $data->selectedmoduleids;
+    // }
+
+    // if (isset($data->selectedmodulenames)) {
+    //     // Asumiendo que 'selectedmodulenames' es una cadena JSON que representa un arreglo de nombres
+    //     $data->selectedmodulenames = $data->selectedmodulenames;
+    // }
 
     $data->id = $DB->insert_record('page', $data);
 
     // we need to use context now, so we need to make sure all needed info is already in db
-    $DB->set_field('course_modules', 'instance', $data->id, array('id'=>$cmid));
+    $DB->set_field('course_modules', 'instance', $data->id, array('id' => $cmid));
     $context = context_module::instance($cmid);
 
     if ($mform and !empty($data->page['itemid'])) {
@@ -131,13 +158,15 @@ function page_add_instance($data, $mform = null) {
     return $data->id;
 }
 
+
 /**
  * Update page instance.
  * @param object $data
  * @param object $mform
  * @return bool true
  */
-function page_update_instance($data, $mform) {
+function page_update_instance($data, $mform)
+{
     global $CFG, $DB;
     require_once("$CFG->libdir/resourcelib.php");
 
@@ -160,6 +189,16 @@ function page_update_instance($data, $mform) {
     $data->content       = $data->page['text'];
     $data->contentformat = $data->page['format'];
 
+    // if (isset($data->selectedmoduleids)) {
+    //     // Asumiendo que 'selectedmoduleids' es un arreglo de IDs como cadena, separados por comas
+    //     $data->selectedmoduleids = $data->selectedmoduleids;
+    // }
+
+    // if (isset($data->selectedmodulenames)) {
+    //     // Asumiendo que 'selectedmodulenames' es una cadena JSON que representa un arreglo de nombres
+    //     $data->selectedmodulenames = $data->selectedmodulenames;
+    // }
+
     $DB->update_record('page', $data);
 
     $context = context_module::instance($cmid);
@@ -179,10 +218,11 @@ function page_update_instance($data, $mform) {
  * @param int $id
  * @return bool true
  */
-function page_delete_instance($id) {
+function page_delete_instance($id)
+{
     global $DB;
 
-    if (!$page = $DB->get_record('page', array('id'=>$id))) {
+    if (!$page = $DB->get_record('page', array('id' => $id))) {
         return false;
     }
 
@@ -191,7 +231,7 @@ function page_delete_instance($id) {
 
     // note: all context files are deleted automatically
 
-    $DB->delete_records('page', array('id'=>$page->id));
+    $DB->delete_records('page', array('id' => $page->id));
 
     return true;
 }
@@ -206,12 +246,16 @@ function page_delete_instance($id) {
  * @param stdClass $coursemodule
  * @return cached_cm_info Info to customise main page display
  */
-function page_get_coursemodule_info($coursemodule) {
+function page_get_coursemodule_info($coursemodule)
+{
     global $CFG, $DB;
     require_once("$CFG->libdir/resourcelib.php");
 
-    if (!$page = $DB->get_record('page', array('id'=>$coursemodule->instance),
-            'id, name, display, displayoptions, intro, introformat')) {
+    if (!$page = $DB->get_record(
+        'page',
+        array('id' => $coursemodule->instance),
+        'id, name, display, displayoptions, intro, introformat'
+    )) {
         return NULL;
     }
 
@@ -248,7 +292,8 @@ function page_get_coursemodule_info($coursemodule) {
  * @param stdClass $context context object
  * @return array
  */
-function page_get_file_areas($course, $cm, $context) {
+function page_get_file_areas($course, $cm, $context)
+{
     $areas = array();
     $areas['content'] = get_string('content', 'page');
     return $areas;
@@ -270,7 +315,8 @@ function page_get_file_areas($course, $cm, $context) {
  * @param string $filename file name
  * @return file_info instance or null if not found
  */
-function page_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
+function page_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename)
+{
     global $CFG;
 
     if (!has_capability('moodle/course:managefiles', $context)) {
@@ -284,7 +330,7 @@ function page_get_file_info($browser, $areas, $course, $cm, $context, $filearea,
         $filepath = is_null($filepath) ? '/' : $filepath;
         $filename = is_null($filename) ? '.' : $filename;
 
-        $urlbase = $CFG->wwwroot.'/pluginfile.php';
+        $urlbase = $CFG->wwwroot . '/pluginfile.php';
         if (!$storedfile = $fs->get_file($context->id, 'mod_page', 'content', 0, $filepath, $filename)) {
             if ($filepath === '/' and $filename === '.') {
                 $storedfile = new virtual_root_file($context->id, 'mod_page', 'content', 0);
@@ -316,7 +362,8 @@ function page_get_file_info($browser, $areas, $course, $cm, $context, $filearea,
  * @param array $options additional options affecting the file serving
  * @return bool false if file not found, does not return if found - just send the file
  */
-function page_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+function page_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array())
+{
     global $CFG, $DB;
     require_once("$CFG->libdir/resourcelib.php");
 
@@ -340,13 +387,19 @@ function page_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
         // serve page content
         $filename = $arg;
 
-        if (!$page = $DB->get_record('page', array('id'=>$cm->instance), '*', MUST_EXIST)) {
+        if (!$page = $DB->get_record('page', array('id' => $cm->instance), '*', MUST_EXIST)) {
             return false;
         }
 
         // We need to rewrite the pluginfile URLs so the media filters can work.
-        $content = file_rewrite_pluginfile_urls($page->content, 'webservice/pluginfile.php', $context->id, 'mod_page', 'content',
-                                                $page->revision);
+        $content = file_rewrite_pluginfile_urls(
+            $page->content,
+            'webservice/pluginfile.php',
+            $context->id,
+            'mod_page',
+            'content',
+            $page->revision
+        );
         $formatoptions = new stdClass;
         $formatoptions->noclean = true;
         $formatoptions->overflowdiv = true;
@@ -355,8 +408,15 @@ function page_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
 
         // Remove @@PLUGINFILE@@/.
         $options = array('reverse' => true);
-        $content = file_rewrite_pluginfile_urls($content, 'webservice/pluginfile.php', $context->id, 'mod_page', 'content',
-                                                $page->revision, $options);
+        $content = file_rewrite_pluginfile_urls(
+            $content,
+            'webservice/pluginfile.php',
+            $context->id,
+            'mod_page',
+            'content',
+            $page->revision,
+            $options
+        );
         $content = str_replace('@@PLUGINFILE@@/', '', $content);
 
         send_file($content, $filename, 0, 0, true, true);
@@ -365,11 +425,11 @@ function page_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
         $relativepath = implode('/', $args);
         $fullpath = "/$context->id/mod_page/$filearea/0/$relativepath";
         if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
-            $page = $DB->get_record('page', array('id'=>$cm->instance), 'id, legacyfiles', MUST_EXIST);
+            $page = $DB->get_record('page', array('id' => $cm->instance), 'id, legacyfiles', MUST_EXIST);
             if ($page->legacyfiles != RESOURCELIB_LEGACYFILES_ACTIVE) {
                 return false;
             }
-            if (!$file = resourcelib_try_file_migration('/'.$relativepath, $cm->id, $cm->course, 'mod_page', 'content', 0)) {
+            if (!$file = resourcelib_try_file_migration('/' . $relativepath, $cm->id, $cm->course, 'mod_page', 'content', 0)) {
                 return false;
             }
             //file migrate - update flag
@@ -388,8 +448,9 @@ function page_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
  * @param stdClass $parentcontext Block's parent context
  * @param stdClass $currentcontext Current context of block
  */
-function page_page_type_list($pagetype, $parentcontext, $currentcontext) {
-    $module_pagetype = array('mod-page-*'=>get_string('page-mod-page-x', 'page'));
+function page_page_type_list($pagetype, $parentcontext, $currentcontext)
+{
+    $module_pagetype = array('mod-page-*' => get_string('page-mod-page-x', 'page'));
     return $module_pagetype;
 }
 
@@ -398,12 +459,13 @@ function page_page_type_list($pagetype, $parentcontext, $currentcontext) {
  *
  * @return array of file content
  */
-function page_export_contents($cm, $baseurl) {
+function page_export_contents($cm, $baseurl)
+{
     global $CFG, $DB;
     $contents = array();
     $context = context_module::instance($cm->id);
 
-    $page = $DB->get_record('page', array('id'=>$cm->instance), '*', MUST_EXIST);
+    $page = $DB->get_record('page', array('id' => $cm->instance), '*', MUST_EXIST);
 
     // page contents
     $fs = get_file_storage();
@@ -414,7 +476,7 @@ function page_export_contents($cm, $baseurl) {
         $file['filename']     = $fileinfo->get_filename();
         $file['filepath']     = $fileinfo->get_filepath();
         $file['filesize']     = $fileinfo->get_filesize();
-        $file['fileurl']      = file_encode_url("$CFG->wwwroot/" . $baseurl, '/'.$context->id.'/mod_page/content/'.$page->revision.$fileinfo->get_filepath().$fileinfo->get_filename(), true);
+        $file['fileurl']      = file_encode_url("$CFG->wwwroot/" . $baseurl, '/' . $context->id . '/mod_page/content/' . $page->revision . $fileinfo->get_filepath() . $fileinfo->get_filename(), true);
         $file['timecreated']  = $fileinfo->get_timecreated();
         $file['timemodified'] = $fileinfo->get_timemodified();
         $file['sortorder']    = $fileinfo->get_sortorder();
@@ -436,7 +498,7 @@ function page_export_contents($cm, $baseurl) {
     $pagefile['filename']     = $filename;
     $pagefile['filepath']     = '/';
     $pagefile['filesize']     = 0;
-    $pagefile['fileurl']      = file_encode_url("$CFG->wwwroot/" . $baseurl, '/'.$context->id.'/mod_page/content/' . $filename, true);
+    $pagefile['fileurl']      = file_encode_url("$CFG->wwwroot/" . $baseurl, '/' . $context->id . '/mod_page/content/' . $filename, true);
     $pagefile['timecreated']  = null;
     $pagefile['timemodified'] = $page->timemodified;
     // make this file as main file
@@ -453,11 +515,12 @@ function page_export_contents($cm, $baseurl) {
  * Register the ability to handle drag and drop file uploads
  * @return array containing details of the files / types the mod can handle
  */
-function page_dndupload_register() {
+function page_dndupload_register()
+{
     return array('types' => array(
-                     array('identifier' => 'text/html', 'message' => get_string('createpage', 'page')),
-                     array('identifier' => 'text', 'message' => get_string('createpage', 'page'))
-                 ));
+        array('identifier' => 'text/html', 'message' => get_string('createpage', 'page')),
+        array('identifier' => 'text', 'message' => get_string('createpage', 'page'))
+    ));
 }
 
 /**
@@ -465,12 +528,13 @@ function page_dndupload_register() {
  * @param object $uploadinfo details of the file / content that has been uploaded
  * @return int instance id of the newly created mod
  */
-function page_dndupload_handle($uploadinfo) {
+function page_dndupload_handle($uploadinfo)
+{
     // Gather the required info.
     $data = new stdClass();
     $data->course = $uploadinfo->course->id;
     $data->name = $uploadinfo->displayname;
-    $data->intro = '<p>'.$uploadinfo->displayname.'</p>';
+    $data->intro = '<p>' . $uploadinfo->displayname . '</p>';
     $data->introformat = FORMAT_HTML;
     if ($uploadinfo->type == 'text/html') {
         $data->contentformat = FORMAT_HTML;
@@ -501,7 +565,8 @@ function page_dndupload_handle($uploadinfo) {
  * @param  stdClass $context    context object
  * @since Moodle 3.0
  */
-function page_view($page, $course, $cm, $context) {
+function page_view($page, $course, $cm, $context)
+{
 
     // Trigger course_module_viewed event.
     $params = array(
@@ -529,7 +594,8 @@ function page_view($page, $course, $cm, $context) {
  * @return stdClass an object with the different type of areas indicating if they were updated or not
  * @since Moodle 3.2
  */
-function page_check_updates_since(cm_info $cm, $from, $filter = array()) {
+function page_check_updates_since(cm_info $cm, $from, $filter = array())
+{
     $updates = course_check_module_updates_since($cm, $from, array('content'), $filter);
     return $updates;
 }
@@ -544,8 +610,11 @@ function page_check_updates_since(cm_info $cm, $from, $filter = array()) {
  * @param \core_calendar\action_factory $factory
  * @return \core_calendar\local\event\entities\action_interface|null
  */
-function mod_page_core_calendar_provide_event_action(calendar_event $event,
-                                                      \core_calendar\action_factory $factory, $userid = 0) {
+function mod_page_core_calendar_provide_event_action(
+    calendar_event $event,
+    \core_calendar\action_factory $factory,
+    $userid = 0
+) {
     global $USER;
 
     if (empty($userid)) {
@@ -577,7 +646,8 @@ function mod_page_core_calendar_provide_event_action(calendar_event $event,
  * @param  array  $args The path (the part after the filearea and before the filename).
  * @return array The itemid and the filepath inside the $args path, for the defined filearea.
  */
-function mod_page_get_path_from_pluginfile(string $filearea, array $args) : array {
+function mod_page_get_path_from_pluginfile(string $filearea, array $args): array
+{
     // Page never has an itemid (the number represents the revision but it's not stored in database).
     array_shift($args);
 
