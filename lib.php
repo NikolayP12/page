@@ -131,6 +131,10 @@ function page_add_instance($data, $mform = null)
         // Nuevo campo: Ruta de aprendizaje
         $data->learningpath       = $data->learningpath_editor['text'];
         $data->learningpathformat = $data->learningpath_editor['format'];
+
+        // Nuevo campo: Conceptos relacionados
+        $data->relatedconcepts       = $data->relatedconcepts_editor['text'];
+        $data->relatedconceptsformat = $data->relatedconcepts_editor['format'];
     }
 
     $data->id = $DB->insert_record('page', $data);
@@ -149,6 +153,12 @@ function page_add_instance($data, $mform = null)
         $draftitemidLearningPath = $data->learningpath_editor['itemid'];
         $data->learningpath = file_save_draft_area_files($draftitemidLearningPath, $context->id, 'mod_page', 'learningpath', 0, page_get_editor_options($context), $data->learningpath);
     }
+
+    if (!empty($data->relatedconcepts_editor['itemid'])) {
+        $draftitemidrelatedconcepts = $data->relatedconcepts_editor['itemid'];
+        $data->relatedconcepts = file_save_draft_area_files($draftitemidrelatedconcepts, $context->id, 'mod_page', 'relatedconcepts', 0, page_get_editor_options($context), $data->relatedconcepts);
+    }
+
     $DB->update_record('page', $data);
 
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
@@ -191,6 +201,10 @@ function page_update_instance($data, $mform)
     $data->learningpath       = $data->learningpath_editor['text'];
     $data->learningpathformat = $data->learningpath_editor['format'];
 
+    // Nuevo campo: Conceptos relacionados
+    $data->relatedconcepts       = $data->relatedconcepts_editor['text'];
+    $data->relatedconceptsformat = $data->relatedconcepts_editor['format'];
+
     $DB->update_record('page', $data);
 
     $context = context_module::instance($cmid);
@@ -200,10 +214,17 @@ function page_update_instance($data, $mform)
         $draftitemid = $data->page['itemid'];
         $data->content = file_save_draft_area_files($draftitemid, $context->id, 'mod_page', 'content', 0, page_get_editor_options($context), $data->content);
     }
+
     // Procesamiento de archivos para 'learningpath'
     if (!empty($data->learningpath_editor['itemid'])) {
         $draftitemidLearningPath = $data->learningpath_editor['itemid'];
         $data->learningpath = file_save_draft_area_files($draftitemidLearningPath, $context->id, 'mod_page', 'learningpath', 0, page_get_editor_options($context), $data->learningpath);
+    }
+
+    // Procesamiento de archivos para 'relatedconcepts'
+    if (!empty($data->relatedconcepts_editor['itemid'])) {
+        $draftitemidrelatedconcepts = $data->relatedconcepts_editor['itemid'];
+        $data->relatedconcepts = file_save_draft_area_files($draftitemidrelatedconcepts, $context->id, 'mod_page', 'relatedconcepts', 0, page_get_editor_options($context), $data->relatedconcepts);
     }
 
     $DB->update_record('page', $data);
@@ -299,6 +320,8 @@ function page_get_file_areas($course, $cm, $context)
     $areas['content'] = get_string('content', 'page');
     // Añade el nuevo campo de archivo 'learningpath'
     $areas['learningpath'] = get_string('learningpath', 'page');
+    // Añade el nuevo campo de archivo 'relatedconcepts'
+    $areas['relatedconcepts'] = get_string('relatedconcepts', 'page');
     return $areas;
 }
 
@@ -330,7 +353,7 @@ function page_get_file_info($browser, $areas, $course, $cm, $context, $filearea,
     $fs = get_file_storage();
 
     // Maneja el área de archivo 'content'
-    if ($filearea === 'content' || $filearea === 'learningpath') {
+    if ($filearea === 'content' || $filearea === 'learningpath' || $filearea === 'relatedconcepts') {
         $filepath = is_null($filepath) ? '/' : $filepath;
         $filename = is_null($filename) ? '.' : $filename;
 
@@ -344,7 +367,7 @@ function page_get_file_info($browser, $areas, $course, $cm, $context, $filearea,
             }
         }
         require_once("$CFG->dirroot/mod/page/locallib.php");
-        // Usa la misma clase file_info para 'learningpath', puedes necesitar ajustar si el manejo difiere
+        // Usa la misma clase file_info para 'learningpath' 'relatedconcepts', puedes necesitar ajustar si el manejo difiere
         return new page_content_file_info($browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true, false);
     }
 
@@ -382,7 +405,7 @@ function page_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
     }
 
     // Añade la comprobación para el nuevo área de archivo 'learningpath'
-    if ($filearea !== 'content' && $filearea !== 'learningpath') {
+    if ($filearea !== 'content' && $filearea !== 'learningpath' && $filearea !== 'relatedconcepts') {
         // intro is handled automatically in pluginfile.php
         return false;
     }
@@ -521,6 +544,29 @@ function page_export_contents($cm, $baseurl)
         $contents[] = $file;
     }
 
+    $files = $fs->get_area_files($context->id, 'mod_page', 'relatedconcepts', 0, 'sortorder DESC, id ASC', false);
+    foreach ($files as $fileinfo) {
+        $file = array();
+        $file['type']         = 'file';
+        $file['filename']     = $fileinfo->get_filename();
+        $file['filepath']     = $fileinfo->get_filepath();
+        $file['filesize']     = $fileinfo->get_filesize();
+        $file['fileurl']      = file_encode_url("$CFG->wwwroot/" . $baseurl, '/' . $context->id . '/mod_page/relatedconcepts/' . $fileinfo->get_filepath() . $fileinfo->get_filename(), true);
+        $file['timecreated']  = $fileinfo->get_timecreated();
+        $file['timemodified'] = $fileinfo->get_timemodified();
+        $file['sortorder']    = $fileinfo->get_sortorder();
+        $file['userid']       = $fileinfo->get_userid();
+        $file['author']       = $fileinfo->get_author();
+        $file['license']      = $fileinfo->get_license();
+        $file['mimetype']     = $fileinfo->get_mimetype();
+        $file['isexternalfile'] = $fileinfo->is_external_file();
+        if ($file['isexternalfile']) {
+            $file['repositorytype'] = $fileinfo->get_repository_type();
+        }
+        $contents[] = $file;
+    }
+
+
     // page html conent
     $filename = 'index.html';
     $pagefile = array();
@@ -626,8 +672,8 @@ function page_view($page, $course, $cm, $context)
  */
 function page_check_updates_since(cm_info $cm, $from, $filter = array())
 {
-    // Incluyo 'learningpath' junto con 'content' para la comprobación de actualizaciones.
-    $updates = course_check_module_updates_since($cm, $from, array('content', 'learningpath'), $filter);
+    // Incluyo 'learningpath' y 'relatedconcepts' junto con 'content' para la comprobación de actualizaciones.
+    $updates = course_check_module_updates_since($cm, $from, array('content', 'learningpath', 'relatedconcepts'), $filter);
     return $updates;
 }
 
