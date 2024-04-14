@@ -37,3 +37,19 @@
     line-height: 1;
     /* Asegúrate de que la 'x' esté centrada verticalmente */
 }
+
+/*Style used for the learning path div*/
+.box-style {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    /* Espacio interior para no pegar el texto a los bordes */
+    margin-bottom: 20px;
+    /* Espacio exterior para separarlo de otros elementos */
+    background-color: #f9f9f9;
+    /* Un fondo ligeramente gris para distinguirlo */
+}
+
+.space-between-style {
+    padding-top: 25px;
+}

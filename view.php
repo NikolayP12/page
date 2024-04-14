@@ -28,6 +28,11 @@ require_once($CFG->dirroot . '/mod/page/lib.php');
 require_once($CFG->dirroot . '/mod/page/locallib.php');
 require_once($CFG->libdir . '/completionlib.php');
 
+global $PAGE;
+//$PAGE->requires->css(new moodle_url('/mod/page/page_style.css'));
+$PAGE->requires->css('/mod/page/page_style.css');
+
+
 $id      = optional_param('id', 0, PARAM_INT); // Course Module ID
 $p       = optional_param('p', 0, PARAM_INT);  // Page instance ID
 $inpopup = optional_param('inpopup', 0, PARAM_BOOL);
@@ -77,24 +82,33 @@ if ($inpopup and $page->display == RESOURCELIB_DISPLAY_POPUP) {
 }
 $PAGE->activityheader->set_attrs($activityheader);
 echo $OUTPUT->header();
+$conceptTitle = get_string('concepttitle', 'page');
+echo $OUTPUT->heading($conceptTitle, 3);
 $content = file_rewrite_pluginfile_urls($page->content, 'pluginfile.php', $context->id, 'mod_page', 'content', $page->revision);
 $formatoptions = new stdClass;
 $formatoptions->noclean = true;
 $formatoptions->overflowdiv = true;
 $formatoptions->context = $context;
 $content = format_text($content, $page->contentformat, $formatoptions);
-echo $OUTPUT->box($content, "generalbox center clearfix");
+echo html_writer::div($content, 'box-style');
+//echo $OUTPUT->box($content, "generalbox center clearfix");
 
 // Inserción del código para mostrar el contenido de "Ruta de aprendizaje"
 if (!empty($page->learningpath)) {
+    $learningPathTitle = get_string('learningpathtitle', 'page');
+    echo $OUTPUT->heading($learningPathTitle, 3, array('class' => 'space-between-style'));
+
+
     $learningpathcontent = file_rewrite_pluginfile_urls($page->learningpath, 'pluginfile.php', $context->id, 'mod_page', 'learningpath', $page->revision);
     $learningpathcontent = format_text($learningpathcontent, $page->learningpathformat, $formatoptions);
-    echo $OUTPUT->box($learningpathcontent, "generalbox center clearfix");
+    // Contenedor con clase específica para el estilo
+    echo html_writer::div($learningpathcontent, 'box-style');
+    //echo $OUTPUT->box($learningpathcontent, "generalbox center clearfix");
 }
 
-if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'])) {
-    $strlastmodified = get_string("lastmodified");
-    echo html_writer::div("$strlastmodified: " . userdate($page->timemodified), 'modified');
-}
+// if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'])) {
+//     $strlastmodified = get_string("lastmodified");
+//     echo html_writer::div("$strlastmodified: " . userdate($page->timemodified), 'modified');
+// }
 
 echo $OUTPUT->footer();

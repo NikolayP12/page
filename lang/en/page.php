@@ -85,10 +85,12 @@ $string['selectactivity'] = 'Select an activity';
 $string['addmodule'] = 'Add module';
 
 //Strings for the editor text field 
-
 $string['learningpathheader'] = 'Learning path';
-$string['learningpath'] = 'Learning path'
+$string['learningpath'] = 'Learning path';
 
+// Strings for tittles
+$string['learningpathtitle'] = 'Recommended learning path to reinforce the content';
+$string['concepttitle'] = 'Content of the page';
 
 // Strings para el desplegable
 $string['mod_assignment'] = 'Assignment';
