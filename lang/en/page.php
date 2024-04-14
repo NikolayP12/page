@@ -76,7 +76,6 @@ $string['search:activity'] = 'Page';
 // Deprecated since 4.0.
 $string['printheading'] = 'Display page name';
 $string['printheadingexplain'] = 'Display page name above content?';
-
 $string['moduletype'] = 'Module type';
 $string['moduleselection'] = 'Module selection';
 $string['selectmodule'] = 'Select module';
@@ -84,6 +83,14 @@ $string['selecttype'] = 'Select a type';
 $string['selectedmodules'] = 'Selected modules';
 $string['selectactivity'] = 'Select an activity';
 $string['addmodule'] = 'Add module';
+
+//Strings for the editor text field 
+
+$string['learningpathheader'] = 'Learning path';
+$string['learningpath'] = 'Learning path'
+
+
+// Strings para el desplegable
 $string['mod_assignment'] = 'Assignment';
 $string['mod_book'] = 'Book';
 $string['mod_chat'] = 'Chat';

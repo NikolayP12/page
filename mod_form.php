@@ -66,7 +66,6 @@ class mod_page_mod_form extends moodleform_mod
 
         //-------------------------------------------------------
 
-
         // Añadimos el desplegable de tipos de módulo
         $module_types = core_component::get_plugin_list('mod');
         $module_types_options = ['' => get_string('selecttype', 'page')]; // Opción inicial
@@ -93,6 +92,13 @@ class mod_page_mod_form extends moodleform_mod
 
         $mform->addElement('static', 'selectedmoduleids', '', '<div id="selectedmoduleids"></div>');
         $mform->setType('selectedmoduleids', PARAM_SEQUENCE); // Use PARAM_SEQUENCE for comma-separated integers.
+
+        //-------------------------------------------------------
+        // Campo para la ruta de aprendizaje de los modulos
+
+        $mform->addElement('header', 'learningpathsection', get_string('learningpathheader', 'page'));
+        $mform->addElement('editor', 'learningpath_editor', get_string('learningpath', 'page'), null, page_get_editor_options($this->context));
+        $mform->addRule('learningpath_editor', get_string('required'), 'required', null, 'client');
 
         //-------------------------------------------------------
 
@@ -177,7 +183,23 @@ class mod_page_mod_form extends moodleform_mod
                 $defaultvalues['content']
             );
             $defaultvalues['page']['itemid'] = $draftitemid;
+
+            // Preprocessing for 'learningpath' 
+            $draftitemidLearningPath = file_get_submitted_draft_itemid('learningpath_editor');
+            $defaultvalues['learningpath_editor']['format'] = $defaultvalues['learningpathformat'];
+            $defaultvalues['learningpath_editor']['text'] = file_prepare_draft_area(
+                $draftitemidLearningPath,
+                $this->context->id,
+                'mod_page',
+                'learningpath',
+                0,
+                page_get_editor_options($this->context),
+                $defaultvalues['learningpath']
+            );
+            $defaultvalues['learningpath_editor']['itemid'] = $draftitemidLearningPath;
         }
+
+
         if (!empty($defaultvalues['displayoptions'])) {
             $displayoptions = (array) unserialize_array($defaultvalues['displayoptions']);
             if (isset($displayoptions['printintro'])) {
