@@ -19,9 +19,12 @@
         <FIELD NAME="displayoptions" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="revision" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="incremented when after each file changes, solves browser caching issues"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-         <!-- Nuevos campos para la ruta de aprendizaje seleccionada -->
+        <!-- Nuevos campos para la ruta de aprendizaje seleccionada -->
         <FIELD NAME="learningpath" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Learning path with the selected modules and instructions"/>
         <FIELD NAME="learningpathformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <!-- Nuevos campos para los conceptos relacionados -->
+        <FIELD NAME="relatedconcepts" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Related concepts with the content"/>
+        <FIELD NAME="relatedconceptsformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
