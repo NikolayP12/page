@@ -24,28 +24,27 @@
  */
 
 require('../../config.php');
-require_once($CFG->dirroot.'/mod/page/lib.php');
-require_once($CFG->dirroot.'/mod/page/locallib.php');
-require_once($CFG->libdir.'/completionlib.php');
+require_once($CFG->dirroot . '/mod/page/lib.php');
+require_once($CFG->dirroot . '/mod/page/locallib.php');
+require_once($CFG->libdir . '/completionlib.php');
 
 $id      = optional_param('id', 0, PARAM_INT); // Course Module ID
 $p       = optional_param('p', 0, PARAM_INT);  // Page instance ID
 $inpopup = optional_param('inpopup', 0, PARAM_BOOL);
 
 if ($p) {
-    if (!$page = $DB->get_record('page', array('id'=>$p))) {
+    if (!$page = $DB->get_record('page', array('id' => $p))) {
         throw new \moodle_exception('invalidaccessparameter');
     }
     $cm = get_coursemodule_from_instance('page', $page->id, $page->course, false, MUST_EXIST);
-
 } else {
     if (!$cm = get_coursemodule_from_id('page', $id)) {
         throw new \moodle_exception('invalidcoursemodule');
     }
-    $page = $DB->get_record('page', array('id'=>$cm->instance), '*', MUST_EXIST);
+    $page = $DB->get_record('page', array('id' => $cm->instance), '*', MUST_EXIST);
 }
 
-$course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
+$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
@@ -65,11 +64,11 @@ if (empty($options['printintro'])) {
 
 if ($inpopup and $page->display == RESOURCELIB_DISPLAY_POPUP) {
     $PAGE->set_pagelayout('popup');
-    $PAGE->set_title($course->shortname.': '.$page->name);
+    $PAGE->set_title($course->shortname . ': ' . $page->name);
     $PAGE->set_heading($course->fullname);
 } else {
     $PAGE->add_body_class('limitedwidth');
-    $PAGE->set_title($course->shortname.': '.$page->name);
+    $PAGE->set_title($course->shortname . ': ' . $page->name);
     $PAGE->set_heading($course->fullname);
     $PAGE->set_activity_record($page);
     if (!$PAGE->activityheader->is_title_allowed()) {
@@ -85,6 +84,13 @@ $formatoptions->overflowdiv = true;
 $formatoptions->context = $context;
 $content = format_text($content, $page->contentformat, $formatoptions);
 echo $OUTPUT->box($content, "generalbox center clearfix");
+
+// Inserción del código para mostrar el contenido de "Ruta de aprendizaje"
+if (!empty($page->learningpath)) {
+    $learningpathcontent = file_rewrite_pluginfile_urls($page->learningpath, 'pluginfile.php', $context->id, 'mod_page', 'learningpath', $page->revision);
+    $learningpathcontent = format_text($learningpathcontent, $page->learningpathformat, $formatoptions);
+    echo $OUTPUT->box($learningpathcontent, "generalbox center clearfix");
+}
 
 if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'])) {
     $strlastmodified = get_string("lastmodified");
