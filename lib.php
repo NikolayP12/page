@@ -127,18 +127,11 @@ function page_add_instance($data, $mform = null)
     if ($mform) {
         $data->content       = $data->page['text'];
         $data->contentformat = $data->page['format'];
+
+        // Nuevo campo: Ruta de aprendizaje
+        $data->learningpath       = $data->learningpath_editor['text'];
+        $data->learningpathformat = $data->learningpath_editor['format'];
     }
-    // Nuevo: Añadir los datos de los módulos seleccionados.
-
-    // if (isset($data->selectedmoduleids)) {
-    //     // Asumiendo que 'selectedmoduleids' es un arreglo de IDs como cadena, separados por comas
-    //     $data->selectedmoduleids = $data->selectedmoduleids;
-    // }
-
-    // if (isset($data->selectedmodulenames)) {
-    //     // Asumiendo que 'selectedmodulenames' es una cadena JSON que representa un arreglo de nombres
-    //     $data->selectedmodulenames = $data->selectedmodulenames;
-    // }
 
     $data->id = $DB->insert_record('page', $data);
 
@@ -149,8 +142,14 @@ function page_add_instance($data, $mform = null)
     if ($mform and !empty($data->page['itemid'])) {
         $draftitemid = $data->page['itemid'];
         $data->content = file_save_draft_area_files($draftitemid, $context->id, 'mod_page', 'content', 0, page_get_editor_options($context), $data->content);
-        $DB->update_record('page', $data);
     }
+
+    // Procesamiento de archivos para 'learningpath'
+    if (!empty($data->learningpath_editor['itemid'])) {
+        $draftitemidLearningPath = $data->learningpath_editor['itemid'];
+        $data->learningpath = file_save_draft_area_files($draftitemidLearningPath, $context->id, 'mod_page', 'learningpath', 0, page_get_editor_options($context), $data->learningpath);
+    }
+    $DB->update_record('page', $data);
 
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
     \core_completion\api::update_completion_date_event($cmid, 'page', $data->id, $completiontimeexpected);
@@ -171,7 +170,6 @@ function page_update_instance($data, $mform)
     require_once("$CFG->libdir/resourcelib.php");
 
     $cmid        = $data->coursemodule;
-    $draftitemid = $data->page['itemid'];
 
     $data->timemodified = time();
     $data->id           = $data->instance;
@@ -189,23 +187,26 @@ function page_update_instance($data, $mform)
     $data->content       = $data->page['text'];
     $data->contentformat = $data->page['format'];
 
-    // if (isset($data->selectedmoduleids)) {
-    //     // Asumiendo que 'selectedmoduleids' es un arreglo de IDs como cadena, separados por comas
-    //     $data->selectedmoduleids = $data->selectedmoduleids;
-    // }
-
-    // if (isset($data->selectedmodulenames)) {
-    //     // Asumiendo que 'selectedmodulenames' es una cadena JSON que representa un arreglo de nombres
-    //     $data->selectedmodulenames = $data->selectedmodulenames;
-    // }
+    // Nuevo campo: Ruta de aprendizaje
+    $data->learningpath       = $data->learningpath_editor['text'];
+    $data->learningpathformat = $data->learningpath_editor['format'];
 
     $DB->update_record('page', $data);
 
     $context = context_module::instance($cmid);
-    if ($draftitemid) {
+
+    // Procesamiento de archivos para 'content'
+    if (!empty($data->page['itemid'])) {
+        $draftitemid = $data->page['itemid'];
         $data->content = file_save_draft_area_files($draftitemid, $context->id, 'mod_page', 'content', 0, page_get_editor_options($context), $data->content);
-        $DB->update_record('page', $data);
     }
+    // Procesamiento de archivos para 'learningpath'
+    if (!empty($data->learningpath_editor['itemid'])) {
+        $draftitemidLearningPath = $data->learningpath_editor['itemid'];
+        $data->learningpath = file_save_draft_area_files($draftitemidLearningPath, $context->id, 'mod_page', 'learningpath', 0, page_get_editor_options($context), $data->learningpath);
+    }
+
+    $DB->update_record('page', $data);
 
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
     \core_completion\api::update_completion_date_event($cmid, 'page', $data->id, $completiontimeexpected);
@@ -296,6 +297,8 @@ function page_get_file_areas($course, $cm, $context)
 {
     $areas = array();
     $areas['content'] = get_string('content', 'page');
+    // Añade el nuevo campo de archivo 'learningpath'
+    $areas['learningpath'] = get_string('learningpath', 'page');
     return $areas;
 }
 
@@ -320,30 +323,32 @@ function page_get_file_info($browser, $areas, $course, $cm, $context, $filearea,
     global $CFG;
 
     if (!has_capability('moodle/course:managefiles', $context)) {
-        // students can not peak here!
+        // Los estudiantes no pueden ver esto
         return null;
     }
 
     $fs = get_file_storage();
 
-    if ($filearea === 'content') {
+    // Maneja el área de archivo 'content'
+    if ($filearea === 'content' || $filearea === 'learningpath') {
         $filepath = is_null($filepath) ? '/' : $filepath;
         $filename = is_null($filename) ? '.' : $filename;
 
         $urlbase = $CFG->wwwroot . '/pluginfile.php';
-        if (!$storedfile = $fs->get_file($context->id, 'mod_page', 'content', 0, $filepath, $filename)) {
+        if (!$storedfile = $fs->get_file($context->id, 'mod_page', $filearea, 0, $filepath, $filename)) {
             if ($filepath === '/' and $filename === '.') {
-                $storedfile = new virtual_root_file($context->id, 'mod_page', 'content', 0);
+                $storedfile = new virtual_root_file($context->id, 'mod_page', $filearea, 0);
             } else {
-                // not found
+                // No encontrado
                 return null;
             }
         }
         require_once("$CFG->dirroot/mod/page/locallib.php");
+        // Usa la misma clase file_info para 'learningpath', puedes necesitar ajustar si el manejo difiere
         return new page_content_file_info($browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true, false);
     }
 
-    // note: page_intro handled in file_browser automatically
+    // Nota: 'page_intro' se maneja automáticamente en file_browser
 
     return null;
 }
@@ -376,13 +381,15 @@ function page_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
         return false;
     }
 
-    if ($filearea !== 'content') {
+    // Añade la comprobación para el nuevo área de archivo 'learningpath'
+    if ($filearea !== 'content' && $filearea !== 'learningpath') {
         // intro is handled automatically in pluginfile.php
         return false;
     }
 
     // $arg could be revision number or index.html
     $arg = array_shift($args);
+
     if ($arg == 'index.html' || $arg == 'index.htm') {
         // serve page content
         $filename = $arg;
@@ -477,6 +484,29 @@ function page_export_contents($cm, $baseurl)
         $file['filepath']     = $fileinfo->get_filepath();
         $file['filesize']     = $fileinfo->get_filesize();
         $file['fileurl']      = file_encode_url("$CFG->wwwroot/" . $baseurl, '/' . $context->id . '/mod_page/content/' . $page->revision . $fileinfo->get_filepath() . $fileinfo->get_filename(), true);
+        $file['timecreated']  = $fileinfo->get_timecreated();
+        $file['timemodified'] = $fileinfo->get_timemodified();
+        $file['sortorder']    = $fileinfo->get_sortorder();
+        $file['userid']       = $fileinfo->get_userid();
+        $file['author']       = $fileinfo->get_author();
+        $file['license']      = $fileinfo->get_license();
+        $file['mimetype']     = $fileinfo->get_mimetype();
+        $file['isexternalfile'] = $fileinfo->is_external_file();
+        if ($file['isexternalfile']) {
+            $file['repositorytype'] = $fileinfo->get_repository_type();
+        }
+        $contents[] = $file;
+    }
+
+    // Exportar archivos de 'learningpath'
+    $files = $fs->get_area_files($context->id, 'mod_page', 'learningpath', 0, 'sortorder DESC, id ASC', false);
+    foreach ($files as $fileinfo) {
+        $file = array();
+        $file['type']         = 'file';
+        $file['filename']     = $fileinfo->get_filename();
+        $file['filepath']     = $fileinfo->get_filepath();
+        $file['filesize']     = $fileinfo->get_filesize();
+        $file['fileurl']      = file_encode_url("$CFG->wwwroot/" . $baseurl, '/' . $context->id . '/mod_page/learningpath/' . $fileinfo->get_filepath() . $fileinfo->get_filename(), true);
         $file['timecreated']  = $fileinfo->get_timecreated();
         $file['timemodified'] = $fileinfo->get_timemodified();
         $file['sortorder']    = $fileinfo->get_sortorder();
@@ -596,7 +626,8 @@ function page_view($page, $course, $cm, $context)
  */
 function page_check_updates_since(cm_info $cm, $from, $filter = array())
 {
-    $updates = course_check_module_updates_since($cm, $from, array('content'), $filter);
+    // Incluyo 'learningpath' junto con 'content' para la comprobación de actualizaciones.
+    $updates = course_check_module_updates_since($cm, $from, array('content', 'learningpath'), $filter);
     return $updates;
 }
 
