@@ -84,9 +84,12 @@ $string['selectedmodules'] = 'Selected modules';
 $string['selectactivity'] = 'Select an activity';
 $string['addmodule'] = 'Add module';
 
-//Strings for the editor text field 
+//Strings for the editor text fields 
 $string['learningpathheader'] = 'Learning path';
 $string['learningpath'] = 'Learning path';
+
+$string['relatedconceptsheader'] = 'Related concepts';
+$string['relatedconcepts'] = 'Related concepts';
 
 // Strings for tittles
 $string['learningpathtitle'] = 'Recommended learning path to reinforce the content';

@@ -100,11 +100,11 @@ class mod_page_mod_form extends moodleform_mod
         $mform->addElement('editor', 'learningpath_editor', get_string('learningpath', 'page'), null, page_get_editor_options($this->context));
         $mform->addRule('learningpath_editor', get_string('required'), 'required', null, 'client');
 
-
         //-------------------------------------------------------
         // Campo para la ruta de aprendizaje de los modulos
-
-
+        $mform->addElement('header', 'relatedconceptssection', get_string('relatedconceptsheader', 'page'));
+        $mform->addElement('editor', 'relatedconcepts_editor', get_string('relatedconcepts', 'page'), null, page_get_editor_options($this->context));
+        //$mform->addRule('relatedconcepts_editor', get_string('required'), 'required', null, 'client');
 
         //-------------------------------------------------------
 
@@ -203,6 +203,21 @@ class mod_page_mod_form extends moodleform_mod
                 $defaultvalues['learningpath']
             );
             $defaultvalues['learningpath_editor']['itemid'] = $draftitemidLearningPath;
+
+            // Preprocessing for 'relatedconcepts' 
+            $draftitemidRelatedConcepts = file_get_submitted_draft_itemid('relatedconcepts_editor');
+            $defaultvalues['relatedconcepts_editor']['format'] = $defaultvalues['relatedconceptsformat'];
+            $defaultvalues['relatedconcepts_editor']['text'] = file_prepare_draft_area(
+                $draftitemidRelatedConcepts,
+                $this->context->id,
+                'mod_page',
+                'relatedconcepts',
+                0,
+                page_get_editor_options($this->context),
+                $defaultvalues['relatedconcepts']
+            );
+
+            $defaultvalues['relatedconcepts_editor']['itemid'] = $draftitemidRelatedConcepts;
         }
 
 
