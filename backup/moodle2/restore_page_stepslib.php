@@ -65,5 +65,6 @@ class restore_page_activity_structure_step extends restore_activity_structure_st
         $this->add_related_files('mod_page', 'intro', null);
         $this->add_related_files('mod_page', 'content', null);
         $this->add_related_files('mod_page', 'learningpath', null);
+        $this->add_related_files('mod_page', 'relatedconcepts', null);
     }
 }

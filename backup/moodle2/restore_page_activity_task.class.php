@@ -58,7 +58,7 @@ class restore_page_activity_task extends restore_activity_task
     {
         $contents = array();
 
-        $contents[] = new restore_decode_content('page', array('intro', 'content', 'learningpath'), 'page');
+        $contents[] = new restore_decode_content('page', array('intro', 'content', 'learningpath', 'relatedconcepts'), 'page');
 
         return $contents;
     }

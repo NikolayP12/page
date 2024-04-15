@@ -44,7 +44,8 @@ class backup_page_activity_structure_step extends backup_activity_structure_step
         $page = new backup_nested_element('page', array('id'), array(
             'name', 'intro', 'introformat', 'content', 'contentformat',
             'legacyfiles', 'legacyfileslast', 'display', 'displayoptions',
-            'revision', 'timemodified', 'learningpath', 'learningpathformat'
+            'revision', 'timemodified', 'learningpath', 'learningpathformat',
+            'relatedconcepts', 'relatedconceptsformat'
         ));
 
         // Build the tree
@@ -60,6 +61,7 @@ class backup_page_activity_structure_step extends backup_activity_structure_step
         $page->annotate_files('mod_page', 'intro', null); // This file areas haven't itemid
         $page->annotate_files('mod_page', 'content', null); // This file areas haven't itemid
         $page->annotate_files('mod_page', 'learningpath', null);
+        $page->annotate_files('mod_page', 'relatedconcepts', null);
 
 
         // Return the root element (page), wrapped into standard activity structure

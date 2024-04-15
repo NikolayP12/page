@@ -93,6 +93,19 @@ $content = format_text($content, $page->contentformat, $formatoptions);
 echo html_writer::div($content, 'box-style');
 //echo $OUTPUT->box($content, "generalbox center clearfix");
 
+// Inserción del código para mostrar los conceptos relacionados
+if (!empty($page->relatedconcepts)) {
+    $relatedconceptsTitle = get_string('relatedconceptstitle', 'page');
+    echo $OUTPUT->heading($relatedconceptsTitle, 3, array('class' => 'space-between-style'));
+
+
+    $relatedconceptscontent = file_rewrite_pluginfile_urls($page->relatedconcepts, 'pluginfile.php', $context->id, 'mod_page', 'relatedconcepts', $page->revision);
+    $relatedconceptscontent = format_text($relatedconceptscontent, $page->relatedconceptsformat, $formatoptions);
+    // Contenedor con clase específica para el estilo
+    echo html_writer::div($relatedconceptscontent, 'box-style');
+    //echo $OUTPUT->box($relatedconceptscontent, "generalbox center clearfix");
+}
+
 // Inserción del código para mostrar el contenido de "Ruta de aprendizaje"
 if (!empty($page->learningpath)) {
     $learningPathTitle = get_string('learningpathtitle', 'page');
@@ -105,6 +118,8 @@ if (!empty($page->learningpath)) {
     echo html_writer::div($learningpathcontent, 'box-style');
     //echo $OUTPUT->box($learningpathcontent, "generalbox center clearfix");
 }
+
+
 
 // if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'])) {
 //     $strlastmodified = get_string("lastmodified");

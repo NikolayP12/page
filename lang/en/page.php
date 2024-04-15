@@ -94,6 +94,8 @@ $string['relatedconcepts'] = 'Related concepts';
 // Strings for tittles
 $string['learningpathtitle'] = 'Recommended learning path to reinforce the content';
 $string['concepttitle'] = 'Content of the page';
+$string['relatedconceptstitle'] = 'Related Concepts';
+
 
 // Strings para el desplegable
 $string['mod_assignment'] = 'Assignment';
