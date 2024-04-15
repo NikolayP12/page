@@ -103,7 +103,6 @@ if (!empty($page->relatedconcepts)) {
     $relatedconceptscontent = format_text($relatedconceptscontent, $page->relatedconceptsformat, $formatoptions);
     // Contenedor con clase específica para el estilo
     echo html_writer::div($relatedconceptscontent, 'box-style');
-    //echo $OUTPUT->box($relatedconceptscontent, "generalbox center clearfix");
 }
 
 // Inserción del código para mostrar el contenido de "Ruta de aprendizaje"
@@ -116,14 +115,34 @@ if (!empty($page->learningpath)) {
     $learningpathcontent = format_text($learningpathcontent, $page->learningpathformat, $formatoptions);
     // Contenedor con clase específica para el estilo
     echo html_writer::div($learningpathcontent, 'box-style');
-    //echo $OUTPUT->box($learningpathcontent, "generalbox center clearfix");
 }
 
 
+// Añade un título para el formulario
+echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4); // Asumiendo que has definido 'sendyourquestion' en el archivo lang.
 
-// if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'])) {
-//     $strlastmodified = get_string("lastmodified");
-//     echo html_writer::div("$strlastmodified: " . userdate($page->timemodified), 'modified');
-// }
+// Empieza el formulario
+echo '<form action="send_question.php" method="post" class="custom-question-form">';
+echo '<input type="hidden" name="id" value="' . $cm->id . '"/>'; // Pasar el ID del módulo de curso como referencia
+echo '<div>';
+echo '<label for="teacheremail">' . get_string('teacheremail', 'page') . '</label>';
+echo '<input type="email" id="teacheremail" name="teacheremail" required>';
+echo '</div>';
+echo '<div>';
+echo '<label for="subject">' . get_string('subject', 'page') . '</label>';
+echo '<input type="text" id="subject" name="subject" required>';
+echo '</div>';
+echo '<div>';
+echo '<label for="messagebody">' . get_string('messagebody', 'page') . '</label>';
+echo '<textarea id="messagebody" name="messagebody" rows="4" required></textarea>';
+echo '</div>';
+echo '<button type="submit">' . get_string('send', 'page') . '</button>';
+echo '</form>';
+
+
+if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'])) {
+    $strlastmodified = get_string("lastmodified");
+    echo html_writer::div("$strlastmodified: " . userdate($page->timemodified), 'modified');
+}
 
 echo $OUTPUT->footer();

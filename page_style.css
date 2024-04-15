@@ -53,3 +53,54 @@
 .space-between-style {
     padding-top: 25px;
 }
+
+/*Style used for the email form*/
+
+.custom-question-form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.custom-question-form div {
+    margin-bottom: 15px;
+}
+
+.custom-question-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.custom-question-form input[type="email"],
+.custom-question-form input[type="text"],
+.custom-question-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    /* Para que el padding no afecte el ancho total */
+}
+
+.custom-question-form textarea {
+    resize: vertical;
+    /* Permite al usuario ajustar la altura del textarea */
+}
+
+.custom-question-form button[type="submit"] {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.custom-question-form button[type="submit"]:hover {
+    background-color: #004494;
+}

@@ -23,33 +23,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Strings para el desplegable
-$string['mod_assignment'] = 'Assignment';
-$string['mod_book'] = 'Book';
-$string['mod_chat'] = 'Chat';
-$string['mod_choice'] = 'Choice';
-$string['mod_database'] = 'Database';
-$string['mod_feedback'] = 'Feedback';
-$string['mod_file'] = 'File';
-$string['mod_folder'] = 'Folder';
-$string['mod_forum'] = 'Forum';
-$string['mod_glossary'] = 'Glossary';
-$string['mod_h5p'] = 'H5P';
-$string['mod_lesson'] = 'Lesson';
-$string['mod_page'] = 'Page';
-$string['mod_quiz'] = 'Quiz';
-$string['mod_scorm'] = 'SCORM package';
-$string['mod_survey'] = 'Survey';
-$string['mod_url'] = 'URL';
-$string['mod_wiki'] = 'Wiki';
-$string['mod_workshop'] = 'Workshop';
-
-$string['alert_selected_module'] = 'This module has been selected';
-
-
-
-
-
 $string['configdisplayoptions'] = 'Select all options that should be available, existing settings are not modified. Hold CTRL key to select multiple fields.';
 $string['content'] = 'Page content';
 $string['contentheader'] = 'Content';
@@ -122,6 +95,13 @@ $string['relatedconcepts'] = 'Related concepts';
 $string['learningpathtitle'] = 'Recommended learning path to reinforce the content';
 $string['concepttitle'] = 'Content of the page';
 $string['relatedconceptstitle'] = 'Related Concepts';
+
+// Strings for the mail section
+$string['sendyourquestion'] = 'Send your question:';
+$string['teacheremail'] = 'Add here the teacher mail ';
+$string['subject'] = 'Subject of the mail ';
+$string['messagebody'] = 'Body of the mail ';
+$string['send'] = 'Send mail';
 
 
 // Strings para el desplegable
