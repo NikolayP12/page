@@ -119,8 +119,7 @@ if (!empty($page->learningpath)) {
 
 
 // Añade un título para el formulario
-echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4); // Asumiendo que has definido 'sendyourquestion' en el archivo lang.
-
+echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4, array('class' => 'space-between-style')); // Asumiendo que has definido 'sendyourquestion' en el archivo lang.
 // Empieza el formulario
 echo '<form action="send_question.php" method="post" class="custom-question-form">';
 echo '<input type="hidden" name="id" value="' . $cm->id . '"/>'; // Pasar el ID del módulo de curso como referencia

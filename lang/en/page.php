@@ -102,7 +102,10 @@ $string['teacheremail'] = 'Add here the teacher mail ';
 $string['subject'] = 'Subject of the mail ';
 $string['messagebody'] = 'Body of the mail ';
 $string['send'] = 'Send mail';
-
+$string['nopermissions'] = 'You have no permissions to sed mails.';
+$string['invalidemail'] = 'Invalid mail';
+$string['emailsent'] = 'Mail sent';
+$string['emailsenderror'] = 'Error sending the email';
 
 // Strings para el desplegable
 $string['mod_assignment'] = 'Assignment';
