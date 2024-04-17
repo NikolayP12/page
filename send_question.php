@@ -1,9 +1,14 @@
 <?php
 
 require_once('../../config.php');
+require_once($CFG->dirroot . '/lib/phpmailer/src/Exception.php');
+require_once($CFG->dirroot . '/lib/phpmailer/src/PHPMailer.php');
+require_once($CFG->dirroot . '/lib/phpmailer/src/SMTP.php');
 require_once($CFG->dirroot . '/lib/moodlelib.php');
 
-//$context = context_system::instance();
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 global $DB, $USER, $PAGE, $COURSE;
 
 // Verifica que el usuario ha iniciado sesión y tiene permiso para enviar el correo.
@@ -13,54 +18,58 @@ if (!isloggedin() || isguestuser()) {
     throw new moodle_exception('nopermissions', 'error', '', 'send email');
 }
 
-// Establecer el contexto del módulo de curso.
-$cmid = required_param('id', PARAM_INT); // ID del módulo del curso.
-$cm = get_coursemodule_from_id('page', $cmid, 0, false, MUST_EXIST); // Asegúrate de que el 'page' coincide con el tipo de módulo.
+$cmid = required_param('id', PARAM_INT);
+$cm = get_coursemodule_from_id('page', $cmid, 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 $context = context_module::instance($cmid);
 
 $PAGE->set_context($context);
-$PAGE->set_url('/mod/page/send_question.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/page/send_question.php', array('id' => $cmid));
 $PAGE->set_course($course);
 $PAGE->set_cm($cm);
 
-
-// Verifica que el formulario se haya enviado y la sesión sea válida.
 if (data_submitted() && confirm_sesskey()) {
     $teacheremail = required_param('teacheremail', PARAM_EMAIL);
     $subject = required_param('subject', PARAM_TEXT);
     $messagebody = required_param('messagebody', PARAM_RAW);
 
-    // Busca el objeto del usuario destinatario usando el correo electrónico proporcionado.
     $teacher = $DB->get_record('user', array('email' => $teacheremail));
-
-    // Verifica si se encontró el usuario.
     if (!$teacher) {
         throw new moodle_exception('invalidemail');
     }
 
-    $emailuser = new stdClass();
-    $emailuser->email = $teacheremail;
+    $mail = new PHPMailer(true);
 
-    //$userfrom = core_user::get_support_user();  // Utiliza el usuario de soporte de Moodle como remitente.
-    $userfrom = core_user::get_noreply_user();
-    $userto = $teacher;
+    try {
+        // Separar el host SMTP y el puerto
+        list($smtphost, $smtpport) = explode(':', $CFG->smtphosts . ':'); // Añade ':' al final para asegurar que explode siempre devuelva un array de al menos 2 elementos
+        $smtpport = $smtpport ?: 587; // Usar el puerto 587 como predeterminado si no se especifica
 
-    // Añade el correo del estudiante en CC.
-    $extraheaders = array('Cc' => $USER->email);
-    error_log('Correo del alumno: ' . $USER->email);
+        // Configuración del servidor
+        $mail->isSMTP();
+        $mail->Host = $smtphost; // Host SMTP
+        $mail->SMTPAuth = true;
+        $mail->Username = $CFG->smtpuser;
+        $mail->Password = $CFG->smtppass;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = $smtpport; // Puerto SMTP
 
-    // Envía el correo.
-    $success = email_to_user($userto, $userfrom, $subject, $messagebody, $messagebody, '', '', $extraheaders);
+        // Remitentes y destinatarios
+        $mail->setFrom($CFG->noreplyaddress, 'From');
+        $mail->addAddress($teacheremail); // Añade al profesor
+        $mail->addCC($USER->email); // Añade al alumno en CC
 
-    if ($success) {
-        // Redirecciona al módulo page con un mensaje de éxito.
+        // Contenido
+        $mail->isHTML(true); // Set email format to HTML
+        $mail->Subject = $subject;
+        $mail->Body    = $messagebody;
+        $mail->AltBody = strip_tags($messagebody);
+
+        $mail->send();
         redirect(new moodle_url('/mod/page/view.php', array('id' => $cmid)), get_string('emailsent', 'page'), null, \core\output\notification::NOTIFY_SUCCESS);
-    } else {
-        // Maneja el error en el envío.
+    } catch (Exception $e) {
         throw new moodle_exception('emailsenderror', 'page');
     }
 } else {
-    // Si el formulario no se ha enviado o la sesión no es válida, redirige al usuario.
     throw new moodle_exception('invalidformdata');
 }
