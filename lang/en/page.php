@@ -106,6 +106,7 @@ $string['nopermissions'] = 'You have no permissions to sed mails.';
 $string['invalidemail'] = 'Invalid mail';
 $string['emailsent'] = 'Mail sent';
 $string['emailsenderror'] = 'Error sending the email';
+$string['teacheremailnotvalid'] = 'The teacher mail you have provided it is not valid';
 
 // Strings para el desplegable
 $string['mod_assignment'] = 'Assignment';
