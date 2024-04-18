@@ -57,8 +57,11 @@ if (data_submitted() && confirm_sesskey()) {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = $smtpport; // Puerto SMTP
 
+        // Configurar codificación UTF-8
+        $mail->CharSet = 'UTF-8';
+
         // Remitentes y destinatarios
-        $mail->setFrom($CFG->noreplyaddress, 'From');
+        $mail->setFrom($CFG->noreplyaddress, 'Page Mail Sender');
         $mail->addAddress($teacheremail); // Añade al profesor
         $mail->addCC($USER->email); // Añade al alumno en CC
 
