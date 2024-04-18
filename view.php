@@ -134,7 +134,7 @@ echo '<input type="text" id="subject" name="subject" required>';
 echo '</div>';
 echo '<div>';
 echo '<label for="messagebody">' . get_string('messagebody', 'page') . '</label>';
-echo '<textarea id="messagebody" name="messagebody" rows="4" required></textarea>';
+echo '<textarea id="messagebody" name="messagebody" rows="10" required></textarea>';
 echo '</div>';
 echo '<button type="submit">' . get_string('send', 'page') . '</button>';
 echo '</form>';
