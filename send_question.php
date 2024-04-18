@@ -15,7 +15,8 @@ global $DB, $USER, $PAGE, $COURSE;
 require_login();
 
 if (!isloggedin() || isguestuser()) {
-    throw new moodle_exception('nopermissions', 'error', '', 'send email');
+    $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+    redirect($url, get_string('nopermissions', 'page'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
 $cmid = required_param('id', PARAM_INT);
@@ -38,7 +39,8 @@ if (data_submitted() && confirm_sesskey()) {
 
     $teacher = $DB->get_record('user', array('email' => $teacheremail));
     if (!$teacher) {
-        throw new moodle_exception('invalidemail');
+        $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+        redirect($url, get_string('invalidemail', 'page'), null, \core\output\notification::NOTIFY_ERROR);
     }
 
     $mail = new PHPMailer(true);
@@ -74,8 +76,10 @@ if (data_submitted() && confirm_sesskey()) {
         $mail->send();
         redirect(new moodle_url('/mod/page/view.php', array('id' => $cmid)), get_string('emailsent', 'page'), null, \core\output\notification::NOTIFY_SUCCESS);
     } catch (Exception $e) {
-        throw new moodle_exception('emailsenderror', 'page');
+        $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+        redirect($url, get_string('emailsenderror', 'page'), null, \core\output\notification::NOTIFY_ERROR);
     }
 } else {
-    throw new moodle_exception('invalidformdata');
+    $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+    redirect($url, get_string('invalidformdata', 'page'), null, \core\output\notification::NOTIFY_ERROR);
 }

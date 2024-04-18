@@ -108,6 +108,8 @@ $string['emailsent'] = 'Mail sent';
 $string['pagemailsender'] = 'Page mail sender';
 $string['emailsenderror'] = 'Error sending the email';
 $string['teacheremailnotvalid'] = 'The teacher mail you have provided it is not valid';
+$string['invalidformdata'] = 'Invalid form data';
+
 
 // Strings para el desplegable
 $string['mod_assignment'] = 'Assignment';
