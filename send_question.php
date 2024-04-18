@@ -13,17 +13,16 @@ global $DB, $USER, $PAGE, $COURSE;
 
 // Verifica que el usuario ha iniciado sesión y tiene permiso para enviar el correo.
 require_login();
+$cmid = required_param('id', PARAM_INT);
 
 if (!isloggedin() || isguestuser()) {
     $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
     redirect($url, get_string('nopermissions', 'page'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
-$cmid = required_param('id', PARAM_INT);
 $cm = get_coursemodule_from_id('page', $cmid, 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 $context = context_module::instance($cmid);
-
 $PAGE->set_context($context);
 $PAGE->set_url('/mod/page/send_question.php', array('id' => $cmid));
 $PAGE->set_course($course);
@@ -33,12 +32,28 @@ if (data_submitted() && confirm_sesskey()) {
     $teacheremail = required_param('teacheremail', PARAM_EMAIL);
     $subject = required_param('subject', PARAM_TEXT);
     $messagebody = required_param('messagebody', PARAM_RAW);
+    $htmlMessageBody = nl2br($messagebody); // Convierte los saltos de línea en <br> para el HTML.
 
-    // Convierte los saltos de línea en <br> para el HTML.
-    $htmlMessageBody = nl2br($messagebody);
+    // $teacher = $DB->get_record('user', array('email' => $teacheremail));
+    // if (!$teacher) {
+    //     $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+    //     redirect($url, get_string('invalidemail', 'page'), null, \core\output\notification::NOTIFY_ERROR);
+    // }
 
     $teacher = $DB->get_record('user', array('email' => $teacheremail));
-    if (!$teacher) {
+    $teacherroles = get_archetype_roles('editingteacher');
+    $teacherroleids = array_keys($teacherroles);
+    $enrolledteachers = get_enrolled_users($context, '', 0, 'u.id, u.email', null, 0, 0, true, $teacherroleids);
+    $teacherfound = false;
+
+    foreach ($enrolledteachers as $enrolledteacher) {
+        if (strcasecmp($enrolledteacher->email, $teacheremail) == 0) {
+            $teacherfound = true;
+            break;
+        }
+    }
+
+    if (!$teacherfound) {
         $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
         redirect($url, get_string('invalidemail', 'page'), null, \core\output\notification::NOTIFY_ERROR);
     }

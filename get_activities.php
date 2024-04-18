@@ -1,17 +1,21 @@
 <?php
 
-require_once('/../../config.php');
+require_once('../../config.php');
 require_login();
-$context = context_system::instance();
 global $COURSE, $DB, $CFG;
+$type = required_param('type', PARAM_PLUGIN); // Valida y sanea el tipo de módulo.
+$courseid = required_param('courseid', PARAM_INT); // Valida y sanea el ID del curso.
+$context = context_course::instance($courseid);
+//$context = context_system::instance();
+
+$PAGE->set_context($context);
 
 // Verifica que el usuario tenga los permisos necesarios para gestionar actividades.
 if (!has_capability('moodle/course:manageactivities', $context)) {
     throw new moodle_exception('nopermissions', 'error', '', 'manage activities');
 }
 
-$type = required_param('type', PARAM_PLUGIN); // Valida y sanea el tipo de módulo.
-$courseid = required_param('courseid', PARAM_INT); // Valida y sanea el ID del curso.
+
 //error_log('Id del curso con COURSE->id: ' . $this->current->course);
 
 require_once($CFG->dirroot . '/course/lib.php');
