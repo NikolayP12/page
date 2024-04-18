@@ -33,6 +33,9 @@ if (data_submitted() && confirm_sesskey()) {
     $subject = required_param('subject', PARAM_TEXT);
     $messagebody = required_param('messagebody', PARAM_RAW);
 
+    // Convierte los saltos de línea en <br> para el HTML.
+    $htmlMessageBody = nl2br($messagebody);
+
     $teacher = $DB->get_record('user', array('email' => $teacheremail));
     if (!$teacher) {
         throw new moodle_exception('invalidemail');
@@ -62,7 +65,7 @@ if (data_submitted() && confirm_sesskey()) {
         // Contenido
         $mail->isHTML(true); // Set email format to HTML
         $mail->Subject = $subject;
-        $mail->Body    = $messagebody;
+        $mail->Body    = $htmlMessageBody;
         $mail->AltBody = strip_tags($messagebody);
 
         $mail->send();
