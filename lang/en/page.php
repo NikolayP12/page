@@ -92,6 +92,7 @@ $string['relatedconceptstitle'] = 'Related Concepts';
 // Strings for the mail section
 $string['sendyourquestion'] = 'Send your question:';
 $string['teacheremail'] = 'Add here the teacher mail ';
+$string['availableteachers'] = 'Course teachers';
 $string['subject'] = 'Subject of the mail';
 $string['messagebody'] = 'Body of the mail';
 $string['send'] = 'Send mail';

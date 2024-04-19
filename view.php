@@ -117,6 +117,33 @@ if (!empty($page->learningpath)) {
     echo html_writer::div($learningpathcontent, 'box-style');
 }
 
+// Filtra los correos electrónicos de los profesores
+$teacherRoles = ['editingteacher', 'teacher'];
+
+// Prepara una lista separada por comas de los 'shortname' de roles, para usar en la consulta SQL.
+$placeholders = implode(',', array_fill(0, count($teacherRoles), '?'));
+
+// Consulta SQL para obtener los correos electrónicos de los profesores en el curso.
+$sql = "SELECT DISTINCT u.id, u.firstname, u.lastname, u.email, 
+        u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename
+        FROM {user} u
+        JOIN {role_assignments} ra ON ra.userid = u.id
+        JOIN {context} ctx ON ra.contextid = ctx.id
+        JOIN {role} r ON ra.roleid = r.id
+        WHERE ctx.contextlevel = ?
+        AND ctx.instanceid = ?
+        AND r.shortname IN ($placeholders)";
+
+$params = array_merge([CONTEXT_COURSE, $course->id], $teacherRoles);
+
+$teachers = $DB->get_records_sql($sql, $params);
+
+// Convierte los resultados en una cadena de correos electrónicos separada por comas.
+$teacherInfoString = '';
+foreach ($teachers as $teacher) {
+    $teacherFullName = fullname($teacher); // Utiliza la función fullname() de Moodle para formatear el nombre completo
+    $teacherInfoString .= "• {$teacherFullName}: {$teacher->email}<br>";
+}
 
 // Añade un título para el formulario
 echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4, array('class' => 'space-between-style'));
@@ -124,6 +151,10 @@ echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4, array('class' =
 echo '<form action="send_question.php" method="post" class="custom-question-form">';
 echo '<input type="hidden" name="sesskey" value="' . s(sesskey()) . '"/>'; // Añade el sesskey al formulario para seguridad
 echo '<input type="hidden" name="id" value="' . $cm->id . '"/>';
+echo '<div>';
+echo '<label for="teachersemails">' . get_string('availableteachers', 'page') . '</label>';
+echo '<p class="teacheremails">' . $teacherInfoString . '</p>';
+echo '</div>';
 echo '<div>';
 echo '<label for="teacheremail">' . get_string('teacheremail', 'page') . '</label>';
 echo '<input type="email" id="teacheremail" name="teacheremail" required>';

@@ -75,6 +75,10 @@
     font-weight: bold;
 }
 
+.custom-question-form .teacheremails {
+    padding-left: 5px;
+}
+
 .custom-question-form input[type="email"],
 .custom-question-form input[type="text"],
 .custom-question-form textarea {

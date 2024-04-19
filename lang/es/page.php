@@ -90,11 +90,12 @@ $string['concepttitle'] = 'Contenido de la página';
 $string['relatedconceptstitle'] = 'Conceptos Relacionados';
 
 // Strings for the mail section
-$string['sendyourquestion'] = 'Envía tu pregunta:';
+$string['sendyourquestion'] = 'Envía tu pregunta por correo:';
 $string['teacheremail'] = 'Agrega el correo del profesor';
+$string['availableteachers'] = 'Profesores del curso';
 $string['subject'] = 'Asunto del mensaje';
 $string['messagebody'] = 'Cuerpo del mensaje';
-$string['send'] = 'Envíar mensaje';
+$string['send'] = 'Enviar mensaje';
 $string['nopermissions'] = 'No tienes permisos para enviar correos.';
 $string['invalidemail'] = 'Correo no válido';
 $string['emailsent'] = 'Mensaje enviado';
