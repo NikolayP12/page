@@ -34,28 +34,35 @@ if (data_submitted() && confirm_sesskey()) {
     $messagebody = required_param('messagebody', PARAM_RAW);
     $htmlMessageBody = nl2br($messagebody); // Convierte los saltos de línea en <br> para el HTML.
 
-    // $teacher = $DB->get_record('user', array('email' => $teacheremail));
-    // if (!$teacher) {
-    //     $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
-    //     redirect($url, get_string('invalidemail', 'page'), null, \core\output\notification::NOTIFY_ERROR);
-    // }
+    // Primero, obtenemos el usuario basado en el correo electrónico
+    $user = $DB->get_record('user', array('email' => $teacheremail));
 
-    $teacher = $DB->get_record('user', array('email' => $teacheremail));
-    $teacherroles = get_archetype_roles('editingteacher');
-    $teacherroleids = array_keys($teacherroles);
-    $enrolledteachers = get_enrolled_users($context, '', 0, 'u.id, u.email', null, 0, 0, true, $teacherroleids);
-    $teacherfound = false;
+    if ($user) {
+        error_log('Entra');
+        // Si encontramos un usuario con ese correo, verificamos si tiene un rol de profesor
+        // Esto puede variar según la configuración de tu Moodle, pero usualmente el rol de profesor tiene el shortname 'editingteacher' o 'teacher'
+        // Adapta el shortname según tu configuración
+        $isTeacher = $DB->get_record_sql(
+            'SELECT * FROM {role_assignments} AS ra
+                                      JOIN {context} AS c ON ra.contextid = c.id
+                                      JOIN {role} AS r ON ra.roleid = r.id
+                                      WHERE r.shortname IN (?, ?)
+                                      AND c.contextlevel = ?
+                                      AND ra.userid = ?',
+            array('editingteacher', 'teacher', CONTEXT_COURSE, $user->id)
+        );
 
-    foreach ($enrolledteachers as $enrolledteacher) {
-        if (strcasecmp($enrolledteacher->email, $teacheremail) == 0) {
-            $teacherfound = true;
-            break;
+        error_log(print_r($isTeacher, false));
+
+        if (empty($isTeacher) || !isset($isTeacher->roleid)) {
+            // El usuario no es un profesor
+            $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+            redirect($url, get_string('teacheremailnotvalid', 'page'), null, \core\output\notification::NOTIFY_ERROR);
         }
-    }
-
-    if (!$teacherfound) {
+    } else {
+        // No se encontró el usuario con el correo proporcionado
         $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
-        redirect($url, get_string('invalidemail', 'page'), null, \core\output\notification::NOTIFY_ERROR);
+        redirect($url, get_string('teacheremailnotvalid', 'page'), null, \core\output\notification::NOTIFY_ERROR);
     }
 
     $mail = new PHPMailer(true);
