@@ -78,35 +78,35 @@ $string['printheading'] = 'Display page name';
 $string['printheadingexplain'] = 'Display page name above content?';
 
 //Strings for the editor text fields 
-$string['learningpathheader'] = 'Learning path';
-$string['learningpath'] = 'Learning path';
+$string['learningpathheader'] = 'Ruta de Aprendizaje';
+$string['learningpath'] = 'Ruta de Aprendizaje';
 
-$string['relatedconceptsheader'] = 'Related concepts';
-$string['relatedconcepts'] = 'Related concepts';
+$string['relatedconceptsheader'] = 'Conceptos Relacionados';
+$string['relatedconcepts'] = 'Conceptos Relacionados';
 
 // Strings for tittles
-$string['learningpathtitle'] = 'Recommended learning path to reinforce the content';
-$string['concepttitle'] = 'Content of the page';
-$string['relatedconceptstitle'] = 'Related Concepts';
+$string['learningpathtitle'] = 'Ruta de aprendizaje recomendada para reforzar el contenido';
+$string['concepttitle'] = 'Contenido de la página';
+$string['relatedconceptstitle'] = 'Conceptos Relacionados';
 
 // Strings for the mail section
-$string['sendyourquestion'] = 'Send your question:';
-$string['teacheremail'] = 'Add here the teacher mail ';
-$string['subject'] = 'Subject of the mail';
-$string['messagebody'] = 'Body of the mail';
-$string['send'] = 'Send mail';
-$string['nopermissions'] = 'You have no permissions to send mails.';
-$string['invalidemail'] = 'Invalid mail';
-$string['emailsent'] = 'Mail sent';
-$string['emailsenderror'] = 'Error sending the email';
-$string['teacheremailnotvalid'] = 'The teacher mail you have provided it is not valid';
-$string['invalidformdata'] = 'Invalid form data';
+$string['sendyourquestion'] = 'Envía tu pregunta:';
+$string['teacheremail'] = 'Agrega el correo del profesor';
+$string['subject'] = 'Asunto del mensaje';
+$string['messagebody'] = 'Cuerpo del mensaje';
+$string['send'] = 'Envíar mensaje';
+$string['nopermissions'] = 'No tienes permisos para enviar correos.';
+$string['invalidemail'] = 'Correo no válido';
+$string['emailsent'] = 'Mensaje enviado';
+$string['emailsenderror'] = 'Error al enviar el correo electrónico.';
+$string['teacheremailnotvalid'] = 'El correo del profesor que ha facilitado no es válido.';
+$string['invalidformdata'] = 'Datos de formulario no válidos';
 
-// Strings for the drop down
-$string['moduletype'] = 'Module type';
-$string['selectmodule'] = 'Select module';
-$string['selecttype'] = 'Select a type';
-$string['selectedmodules'] = 'Selected modules';
+// Strings para el desplegable
+$string['moduletype'] = 'Tipo de módulo';
+$string['selectmodule'] = 'Seleccione el módulo';
+$string['selecttype'] = 'Seleccione el tipo';
+$string['selectedmodules'] = 'Modulos seleccionados';
 
 $string['mod_assignment'] = 'Assignment';
 $string['mod_book'] = 'Book';
