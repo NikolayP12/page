@@ -38,10 +38,6 @@ if (data_submitted() && confirm_sesskey()) {
     $user = $DB->get_record('user', array('email' => $teacheremail));
 
     if ($user) {
-        error_log('Entra');
-        // Si encontramos un usuario con ese correo, verificamos si tiene un rol de profesor
-        // Esto puede variar según la configuración de tu Moodle, pero usualmente el rol de profesor tiene el shortname 'editingteacher' o 'teacher'
-        // Adapta el shortname según tu configuración
         $isTeacher = $DB->get_record_sql(
             'SELECT * FROM {role_assignments} AS ra
                                       JOIN {context} AS c ON ra.contextid = c.id
@@ -51,8 +47,6 @@ if (data_submitted() && confirm_sesskey()) {
                                       AND ra.userid = ?',
             array('editingteacher', 'teacher', CONTEXT_COURSE, $user->id)
         );
-
-        error_log(print_r($isTeacher, false));
 
         if (empty($isTeacher) || !isset($isTeacher->roleid)) {
             // El usuario no es un profesor
@@ -94,7 +88,6 @@ if (data_submitted() && confirm_sesskey()) {
         $mail->Subject = $subject;
         $mail->Body    = $htmlMessageBody;
         $mail->AltBody = strip_tags($messagebody);
-
         $mail->send();
         redirect(new moodle_url('/mod/page/view.php', array('id' => $cmid)), get_string('emailsent', 'page'), null, \core\output\notification::NOTIFY_SUCCESS);
     } catch (Exception $e) {

@@ -91,6 +91,7 @@ $string['relatedconceptstitle'] = 'Conceptos Relacionados';
 
 // Strings for the mail section
 $string['sendyourquestion'] = 'Envía tu pregunta por correo:';
+$string['dropdownform'] = 'Visualizar el formulario';
 $string['teacheremail'] = 'Agrega el correo del profesor';
 $string['availableteachers'] = 'Profesores del curso';
 $string['subject'] = 'Asunto del mensaje';

@@ -32,7 +32,6 @@ global $PAGE;
 //$PAGE->requires->css(new moodle_url('/mod/page/page_style.css'));
 $PAGE->requires->css('/mod/page/page_style.css');
 
-
 $id      = optional_param('id', 0, PARAM_INT); // Course Module ID
 $p       = optional_param('p', 0, PARAM_INT);  // Page instance ID
 $inpopup = optional_param('inpopup', 0, PARAM_BOOL);
@@ -148,6 +147,19 @@ foreach ($teachers as $teacher) {
 // Añade un título para el formulario
 echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4, array('class' => 'space-between-style'));
 // Empieza el formulario
+// Asegúrate de que el script se cargue correctamente. Esta línea puede ir al final del archivo PHP o donde mejor consideres según tu estructura.
+echo '<script src="' . new moodle_url('/mod/page/accordion.js') . '"></script>';
+
+// Comienza el contenedor del acordeón
+echo '<div class="accordion-container">';
+
+// Este es el título del acordeón, el cual los usuarios pueden clickear para expandir o colapsar el contenido
+echo '<h2 class="accordion-title">' . get_string('dropdownform', 'page') . '</h2>';
+
+// Este es el contenido del acordeón, el cual se mostrará/ocultará cuando se haga clic en el título del acordeón
+echo '<div class="accordion-content">';
+
+// Aquí empieza tu formulario
 echo '<form action="send_question.php" method="post" class="custom-question-form">';
 echo '<input type="hidden" name="sesskey" value="' . s(sesskey()) . '"/>'; // Añade el sesskey al formulario para seguridad
 echo '<input type="hidden" name="id" value="' . $cm->id . '"/>';
@@ -169,6 +181,10 @@ echo '<textarea id="messagebody" name="messagebody" rows="10" required></textare
 echo '</div>';
 echo '<button type="submit">' . get_string('send', 'page') . '</button>';
 echo '</form>';
+
+// Cierra el contenido y el contenedor del acordeón
+echo '</div>'; // Cierre de .accordion-content
+echo '</div>'; // Cierre de .accordion-container
 
 
 if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'])) {

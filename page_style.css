@@ -57,12 +57,13 @@
 /*Style used for the email form*/
 
 .custom-question-form {
-    max-width: 90%;
-    margin: 20px auto;
+    max-width: 100%;
+    margin: 10px auto;
     padding: 20px;
     background-color: #f5f5f5;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #33333307;
 }
 
 .custom-question-form div {
@@ -107,4 +108,64 @@
 
 .custom-question-form button[type="submit"]:hover {
     background-color: #004494;
+}
+
+/* Style for the accordion*/
+.accordion-container {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.accordion-title {
+    background: #f2f2f2;
+    color: #333;
+    padding: 15px 20px;
+    margin: 0;
+    cursor: pointer;
+    font-size: 18px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.accordion-title:hover {
+    background-color: #e6e6e6;
+}
+
+.accordion-title::after {
+    content: "\002B";
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #333;
+}
+
+.accordion-title.open::after {
+    content: "\2212";
+    color: #333;
+}
+
+.accordion-content {
+    display: none;
+    padding: 20px;
+    border-top: 1px solid #3333331e;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.accordion-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    padding: 10px 0;
 }
