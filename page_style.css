@@ -1,16 +1,15 @@
+/*Style used for the drop down module selection*/
 .selected-module {
     margin-bottom: 7px;
     margin-right: 7px;
     padding: 7px;
     padding-left: 15px;
     padding-right: 0px;
-    /*margin: 10px;*/
     border: 1px solid #b9b9b9;
     background-color: rgb(244, 248, 255);
     display: inline-flex;
     align-items: center;
     border-radius: 10px;
-    /* Añade redondeo a los bordes del módulo */
 }
 
 
@@ -22,20 +21,14 @@
     cursor: pointer;
     padding: 0 5px;
     border-radius: 50%;
-    /* Hace el botón redondo */
     width: 20px;
-    /* Establece un ancho fijo para el botón */
-    height: 20px;
-    /* Establece una altura fija para el botón */
     display: flex;
     margin-top: 1px;
     justify-content: center;
     align-items: center;
     font-size: 14px;
     font-weight: bold;
-    /* Ajusta el tamaño de la fuente de la 'x' si es necesario */
     line-height: 1;
-    /* Asegúrate de que la 'x' esté centrada verticalmente */
 }
 
 /*Style used for the learning path div*/
@@ -43,11 +36,8 @@
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 15px;
-    /* Espacio interior para no pegar el texto a los bordes */
     margin-bottom: 20px;
-    /* Espacio exterior para separarlo de otros elementos */
     background-color: #f9f9f9;
-    /* Un fondo ligeramente gris para distinguirlo */
 }
 
 .space-between-style {
@@ -55,7 +45,6 @@
 }
 
 /*Style used for the email form*/
-
 .custom-question-form {
     max-width: 100%;
     margin: 10px auto;
@@ -88,12 +77,10 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    /* Para que el padding no afecte el ancho total */
 }
 
 .custom-question-form textarea {
     resize: vertical;
-    /* Permite al usuario ajustar la altura del textarea */
 }
 
 .custom-question-form button[type="submit"] {

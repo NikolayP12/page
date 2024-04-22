@@ -49,7 +49,7 @@ if (data_submitted() && confirm_sesskey()) {
         );
 
         if (empty($isTeacher) || !isset($isTeacher->roleid)) {
-            // The user is not a teacher
+            // The user is not a teacher.
             $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
             redirect($url, get_string('teacheremailnotvalid', 'page'), null, \core\output\notification::NOTIFY_ERROR);
         }
