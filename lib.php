@@ -128,11 +128,11 @@ function page_add_instance($data, $mform = null)
         $data->content       = $data->page['text'];
         $data->contentformat = $data->page['format'];
 
-        // Nuevo campo: Ruta de aprendizaje
+        // New field: Learning path.
         $data->learningpath       = $data->learningpath_editor['text'];
         $data->learningpathformat = $data->learningpath_editor['format'];
 
-        // Nuevo campo: Conceptos relacionados
+        // New field: Related concepts.
         $data->relatedconcepts       = $data->relatedconcepts_editor['text'];
         $data->relatedconceptsformat = $data->relatedconcepts_editor['format'];
     }
@@ -148,7 +148,7 @@ function page_add_instance($data, $mform = null)
         $data->content = file_save_draft_area_files($draftitemid, $context->id, 'mod_page', 'content', 0, page_get_editor_options($context), $data->content);
     }
 
-    // Procesamiento de archivos para 'learningpath'
+    // File processing for 'learningpath'.
     if (!empty($data->learningpath_editor['itemid'])) {
         $draftitemidLearningPath = $data->learningpath_editor['itemid'];
         $data->learningpath = file_save_draft_area_files($draftitemidLearningPath, $context->id, 'mod_page', 'learningpath', 0, page_get_editor_options($context), $data->learningpath);
@@ -197,11 +197,11 @@ function page_update_instance($data, $mform)
     $data->content       = $data->page['text'];
     $data->contentformat = $data->page['format'];
 
-    // Nuevo campo: Ruta de aprendizaje
+    // New field: Learning path.
     $data->learningpath       = $data->learningpath_editor['text'];
     $data->learningpathformat = $data->learningpath_editor['format'];
 
-    // Nuevo campo: Conceptos relacionados
+    // New field: Related concepts.
     $data->relatedconcepts       = $data->relatedconcepts_editor['text'];
     $data->relatedconceptsformat = $data->relatedconcepts_editor['format'];
 
@@ -209,19 +209,19 @@ function page_update_instance($data, $mform)
 
     $context = context_module::instance($cmid);
 
-    // Procesamiento de archivos para 'content'
+    // File processing for 'content'.
     if (!empty($data->page['itemid'])) {
         $draftitemid = $data->page['itemid'];
         $data->content = file_save_draft_area_files($draftitemid, $context->id, 'mod_page', 'content', 0, page_get_editor_options($context), $data->content);
     }
 
-    // Procesamiento de archivos para 'learningpath'
+    // File processing for 'learningpath'.
     if (!empty($data->learningpath_editor['itemid'])) {
         $draftitemidLearningPath = $data->learningpath_editor['itemid'];
         $data->learningpath = file_save_draft_area_files($draftitemidLearningPath, $context->id, 'mod_page', 'learningpath', 0, page_get_editor_options($context), $data->learningpath);
     }
 
-    // Procesamiento de archivos para 'relatedconcepts'
+    // File processing for 'relatedconcepts'.
     if (!empty($data->relatedconcepts_editor['itemid'])) {
         $draftitemidrelatedconcepts = $data->relatedconcepts_editor['itemid'];
         $data->relatedconcepts = file_save_draft_area_files($draftitemidrelatedconcepts, $context->id, 'mod_page', 'relatedconcepts', 0, page_get_editor_options($context), $data->relatedconcepts);
@@ -318,9 +318,9 @@ function page_get_file_areas($course, $cm, $context)
 {
     $areas = array();
     $areas['content'] = get_string('content', 'page');
-    // Añade el nuevo campo de archivo 'learningpath'
+    // Add the new file field 'learningpath'.
     $areas['learningpath'] = get_string('learningpath', 'page');
-    // Añade el nuevo campo de archivo 'relatedconcepts'
+    // Add new file field 'relatedconcepts'.
     $areas['relatedconcepts'] = get_string('relatedconcepts', 'page');
     return $areas;
 }
@@ -346,13 +346,12 @@ function page_get_file_info($browser, $areas, $course, $cm, $context, $filearea,
     global $CFG;
 
     if (!has_capability('moodle/course:managefiles', $context)) {
-        // Los estudiantes no pueden ver esto
         return null;
     }
 
     $fs = get_file_storage();
 
-    // Maneja el área de archivo 'content'
+    // Manages the 'content' file area.
     if ($filearea === 'content' || $filearea === 'learningpath' || $filearea === 'relatedconcepts') {
         $filepath = is_null($filepath) ? '/' : $filepath;
         $filename = is_null($filename) ? '.' : $filename;
@@ -362,16 +361,12 @@ function page_get_file_info($browser, $areas, $course, $cm, $context, $filearea,
             if ($filepath === '/' and $filename === '.') {
                 $storedfile = new virtual_root_file($context->id, 'mod_page', $filearea, 0);
             } else {
-                // No encontrado
                 return null;
             }
         }
         require_once("$CFG->dirroot/mod/page/locallib.php");
-        // Usa la misma clase file_info para 'learningpath' 'relatedconcepts', puedes necesitar ajustar si el manejo difiere
         return new page_content_file_info($browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true, false);
     }
-
-    // Nota: 'page_intro' se maneja automáticamente en file_browser
 
     return null;
 }
@@ -404,9 +399,8 @@ function page_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
         return false;
     }
 
-    // Añade la comprobación para el nuevo área de archivo 'learningpath'
+    // Adds the check for the new file area 'learningpath' and 'relatedconcepts'.
     if ($filearea !== 'content' && $filearea !== 'learningpath' && $filearea !== 'relatedconcepts') {
-        // intro is handled automatically in pluginfile.php
         return false;
     }
 
@@ -521,7 +515,7 @@ function page_export_contents($cm, $baseurl)
         $contents[] = $file;
     }
 
-    // Exportar archivos de 'learningpath'
+    // Export 'learningpath' files.
     $files = $fs->get_area_files($context->id, 'mod_page', 'learningpath', 0, 'sortorder DESC, id ASC', false);
     foreach ($files as $fileinfo) {
         $file = array();
@@ -544,6 +538,7 @@ function page_export_contents($cm, $baseurl)
         $contents[] = $file;
     }
 
+    // Export 'relatedconcepts' files.
     $files = $fs->get_area_files($context->id, 'mod_page', 'relatedconcepts', 0, 'sortorder DESC, id ASC', false);
     foreach ($files as $fileinfo) {
         $file = array();
