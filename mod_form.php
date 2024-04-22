@@ -95,10 +95,6 @@ class mod_page_mod_form extends moodleform_mod
 
         // The container for the selected modules is added.
         $mform->addElement('static', 'selectedmodules', get_string('selectedmodules', 'page'), '<div id="selected-modules-container"></div>');
-        $mform->addElement('static', 'selectedmodulenames', '', '<div id="selectedmodulenames"></div>');
-        $mform->setType('selectedmodulenames', PARAM_TEXT);
-        $mform->addElement('static', 'selectedmoduleids', '', '<div id="selectedmoduleids"></div>');
-        $mform->setType('selectedmoduleids', PARAM_SEQUENCE); // Use PARAM_SEQUENCE for comma-separated integers.
 
         // The editor is added to be able to write the learning path.
         $mform->addElement('editor', 'learningpath_editor', get_string('learningpath', 'page'), null, page_get_editor_options($this->context));

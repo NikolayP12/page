@@ -1,35 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Initialize DOM elements.
     var moduleTypeSelect = document.getElementById('id_moduletype');
     var moduleInstanceSelect = document.getElementById('id_moduleinstance');
     var selectedModulesContainer = document.getElementById('selected-modules-container');
-    var hiddenSelectedModuleIds = document.getElementById('selectedmoduleids');
-    var hiddenSelectedModuleNames = document.getElementById('selectedmodulenames');
     var courseId = document.getElementById('courseid').value;
 
+    // Store selected module IDs and names.
     var arraySelectedModuleName = [];
     var arraySelectedModuleId = [];
 
-    function updateHiddenIdsField() {
-        if (hiddenSelectedModuleIds) { // Asegurarse de que el elemento existe
-            hiddenSelectedModuleIds.value = arraySelectedModuleId.join(', ');
-        } else {
-            console.error('Hidden ids field not found');
-        }
-    }
-
-    function updateHiddenNamesField() {
-        if (hiddenSelectedModuleNames) { // Asegurarse de que el elemento existe
-            hiddenSelectedModuleNames.value = arraySelectedModuleName.join(', ');
-        } else {
-            console.error('Hidden names field not found');
-        }
-    }
-
-    // Actualizar desplegable de instancias de módulo cuando cambie el tipo de módulo
+    // Fetch and update module instance options on module type change.
     moduleTypeSelect.addEventListener('change', function () {
         var type = this.value;
 
         if (type) {
+            // Construct and send the AJAX request.
             var ajaxurl = M.cfg.wwwroot + '/mod/page/get_activities.php?type=' + encodeURIComponent(type) + '&courseid=' + courseId;
             fetch(ajaxurl)
                 .then(response => {
@@ -39,15 +24,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.json();
                 })
                 .then(data => {
-                    // Limpiar las opciones existentes
+                    // Clear existing options and add a default 'Select an activity' option.
                     moduleInstanceSelect.innerHTML = '';
-                    // Añadir una opción predeterminada
                     var defaultOption = new Option('Select an activity', '');
                     moduleInstanceSelect.add(defaultOption);
 
-                    // Añadir nuevas opciones
-                    if (data.data && Array.isArray(data.data)) { // Asegurarse de que data.data existe y es un array
-                        data.data.forEach(activity => { // Usar data.data para acceder al array de actividades
+                    // Ensures that data.data exists and is an array of activities.
+                    if (data.data && Array.isArray(data.data)) {
+                        // Fills the module instance select with fetched activities.
+                        data.data.forEach(activity => {
                             var option = new Option(activity.name, activity.id);
                             moduleInstanceSelect.add(option);
                         });
@@ -61,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Manejar la selección de una instancia de módulo
+    // Handles the selection of a module instance.
     moduleInstanceSelect.addEventListener('change', function () {
         var moduleId = this.value;
         var moduleName = this.options[this.selectedIndex].text;
@@ -70,20 +55,18 @@ document.addEventListener('DOMContentLoaded', function () {
             arraySelectedModuleId.push(moduleId);
             arraySelectedModuleName.push(moduleName);
 
-            updateHiddenIdsField();
-            updateHiddenNamesField();
-
             var selectedModule = document.createElement('div');
             selectedModule.className = 'selected-module';
             selectedModule.textContent = moduleName;
             selectedModule.setAttribute('data-module-id', moduleId);
 
-            // Crear y agregar el botón de eliminar
+            // Creates and adds the delete button.
             var deleteButton = document.createElement('button');
             deleteButton.textContent = '×';
             deleteButton.className = 'delete-module-button';
-            deleteButton.type = 'button'; // Asegurar que no envíe el formulario
+            deleteButton.type = 'button';
             deleteButton.onclick = function () {
+                // Removes the module from UI and selection arrays.
                 selectedModulesContainer.removeChild(selectedModule);
                 arraySelectedModuleId = arraySelectedModuleId.filter(function (id) {
                     return id !== moduleId;
@@ -93,14 +76,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     return name !== moduleName;
                 });
 
-                updateHiddenIdsField();
-                updateHiddenNamesField();
-
                 this.value = '';
             };
-
-            updateHiddenIdsField();
-            updateHiddenNamesField();
 
             selectedModule.appendChild(deleteButton);
             selectedModulesContainer.appendChild(selectedModule);
