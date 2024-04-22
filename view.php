@@ -92,37 +92,31 @@ $content = format_text($content, $page->contentformat, $formatoptions);
 echo html_writer::div($content, 'box-style');
 //echo $OUTPUT->box($content, "generalbox center clearfix");
 
-// Inserción del código para mostrar los conceptos relacionados
+// Insertion of the code that will show the related concepts.
 if (!empty($page->relatedconcepts)) {
     $relatedconceptsTitle = get_string('relatedconceptstitle', 'page');
     echo $OUTPUT->heading($relatedconceptsTitle, 3, array('class' => 'space-between-style'));
-
-
     $relatedconceptscontent = file_rewrite_pluginfile_urls($page->relatedconcepts, 'pluginfile.php', $context->id, 'mod_page', 'relatedconcepts', $page->revision);
     $relatedconceptscontent = format_text($relatedconceptscontent, $page->relatedconceptsformat, $formatoptions);
-    // Contenedor con clase específica para el estilo
     echo html_writer::div($relatedconceptscontent, 'box-style');
 }
 
-// Inserción del código para mostrar el contenido de "Ruta de aprendizaje"
+// Insertion of the code to display the content of the learning path.
 if (!empty($page->learningpath)) {
     $learningPathTitle = get_string('learningpathtitle', 'page');
     echo $OUTPUT->heading($learningPathTitle, 3, array('class' => 'space-between-style'));
-
-
     $learningpathcontent = file_rewrite_pluginfile_urls($page->learningpath, 'pluginfile.php', $context->id, 'mod_page', 'learningpath', $page->revision);
     $learningpathcontent = format_text($learningpathcontent, $page->learningpathformat, $formatoptions);
-    // Contenedor con clase específica para el estilo
     echo html_writer::div($learningpathcontent, 'box-style');
 }
 
-// Filtra los correos electrónicos de los profesores
+// Filter teachers' e-mails
 $teacherRoles = ['editingteacher', 'teacher'];
 
-// Prepara una lista separada por comas de los 'shortname' de roles, para usar en la consulta SQL.
+// Prepare a comma-separated list of role shortnames for use in the SQL query.
 $placeholders = implode(',', array_fill(0, count($teacherRoles), '?'));
 
-// Consulta SQL para obtener los correos electrónicos de los profesores en el curso.
+// SQL query to get the e-mails of the teachers of the course.
 $sql = "SELECT DISTINCT u.id, u.firstname, u.lastname, u.email, 
         u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename
         FROM {user} u
@@ -137,31 +131,23 @@ $params = array_merge([CONTEXT_COURSE, $course->id], $teacherRoles);
 
 $teachers = $DB->get_records_sql($sql, $params);
 
-// Convierte los resultados en una cadena de correos electrónicos separada por comas.
+// Convert the results into a comma-separated string of emails.
 $teacherInfoString = '';
 foreach ($teachers as $teacher) {
-    $teacherFullName = fullname($teacher); // Utiliza la función fullname() de Moodle para formatear el nombre completo
+    $teacherFullName = fullname($teacher);
     $teacherInfoString .= "• {$teacherFullName}: {$teacher->email}<br>";
 }
 
-// Añade un título para el formulario
+// Add a title for the form
 echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4, array('class' => 'space-between-style'));
-// Empieza el formulario
-// Asegúrate de que el script se cargue correctamente. Esta línea puede ir al final del archivo PHP o donde mejor consideres según tu estructura.
 echo '<script src="' . new moodle_url('/mod/page/accordion.js') . '"></script>';
-
-// Comienza el contenedor del acordeón
+// Accordion container begins.
 echo '<div class="accordion-container">';
-
-// Este es el título del acordeón, el cual los usuarios pueden clickear para expandir o colapsar el contenido
+// This is the title of the accordion, which users can click to expand or collapse the content.
 echo '<h2 class="accordion-title">' . get_string('dropdownform', 'page') . '</h2>';
-
-// Este es el contenido del acordeón, el cual se mostrará/ocultará cuando se haga clic en el título del acordeón
 echo '<div class="accordion-content">';
-
-// Aquí empieza tu formulario
 echo '<form action="send_question.php" method="post" class="custom-question-form">';
-echo '<input type="hidden" name="sesskey" value="' . s(sesskey()) . '"/>'; // Añade el sesskey al formulario para seguridad
+echo '<input type="hidden" name="sesskey" value="' . s(sesskey()) . '"/>';
 echo '<input type="hidden" name="id" value="' . $cm->id . '"/>';
 echo '<div>';
 echo '<label for="teachersemails">' . get_string('availableteachers', 'page') . '</label>';
@@ -181,10 +167,9 @@ echo '<textarea id="messagebody" name="messagebody" rows="10" required></textare
 echo '</div>';
 echo '<button type="submit">' . get_string('send', 'page') . '</button>';
 echo '</form>';
-
-// Cierra el contenido y el contenedor del acordeón
-echo '</div>'; // Cierre de .accordion-content
-echo '</div>'; // Cierre de .accordion-container
+// Closes the content and the chord container.
+echo '</div>'; // Closing .accordion-content
+echo '</div>'; // Closing .accordion-container
 
 
 if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'])) {
