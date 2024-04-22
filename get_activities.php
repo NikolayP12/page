@@ -15,9 +15,6 @@ if (!has_capability('moodle/course:manageactivities', $context)) {
     throw new moodle_exception('nopermissions', 'error', '', 'manage activities');
 }
 
-
-//error_log('Id del curso con COURSE->id: ' . $this->current->course);
-
 require_once($CFG->dirroot . '/course/lib.php');
 
 $activities = [];

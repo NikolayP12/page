@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateHiddenIdsField() {
         if (hiddenSelectedModuleIds) { // Asegurarse de que el elemento existe
             hiddenSelectedModuleIds.value = arraySelectedModuleId.join(', ');
-            console.log(hiddenSelectedModuleIds.value);
         } else {
             console.error('Hidden ids field not found');
         }
@@ -21,15 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateHiddenNamesField() {
         if (hiddenSelectedModuleNames) { // Asegurarse de que el elemento existe
             hiddenSelectedModuleNames.value = arraySelectedModuleName.join(', ');
-            console.log(hiddenSelectedModuleNames.value);
         } else {
             console.error('Hidden names field not found');
         }
     }
-
-    //var courseId = getQueryParam('course');
-    // var courseId = ideCurso.value;
-    // console.log(courseId);
 
     // Actualizar desplegable de instancias de módulo cuando cambie el tipo de módulo
     moduleTypeSelect.addEventListener('change', function () {
@@ -37,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (type) {
             var ajaxurl = M.cfg.wwwroot + '/mod/page/get_activities.php?type=' + encodeURIComponent(type) + '&courseid=' + courseId;
-            console.log('Entro a dropdown.js y el AJAX URL es:', ajaxurl);
             fetch(ajaxurl)
                 .then(response => {
                     if (!response.ok) {
