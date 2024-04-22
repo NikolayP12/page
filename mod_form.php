@@ -66,40 +66,41 @@ class mod_page_mod_form extends moodleform_mod
 
         //-------------------------------------------------------
 
-        // Campo para la ruta de aprendizaje de los modulos
+        // Field for related concepts.
         $mform->addElement('header', 'relatedconceptssection', get_string('relatedconceptsheader', 'page'));
         $mform->addElement('editor', 'relatedconcepts_editor', get_string('relatedconcepts', 'page'), null, page_get_editor_options($this->context));
 
         //-------------------------------------------------------
 
-        // Encabezado para especificar la zona de la ruta de aprendizaje
+        // Header to specify the learning path section.
         $mform->addElement('header', 'learningpathsection', get_string('learningpathheader', 'page'));
 
-        // Añadimos el desplegable de tipos de módulo
+        // The drop-down list of module types is added.
         $module_types = core_component::get_plugin_list('mod');
-        $module_types_options = ['' => get_string('selecttype', 'page')]; // Opción inicial
+        $module_types_options = ['' => get_string('selecttype', 'page')]; // Initial option.
         foreach ($module_types as $module_type => $notused) {
-            // Usamos el nombre del módulo como etiqueta. Asumiendo que 'modulename' es una cadena en el archivo de idioma.
+            // The module name is used as the label.
             $module_types_options[$module_type] = get_string('pluginname', 'mod_' . $module_type);
         }
 
-        // Añadir el desplegable al formulario.
+        // The drop-down is added to the form.
         $mform->addElement('select', 'moduletype', get_string('moduletype', 'page'), $module_types_options);
         $mform->setType('moduletype', PARAM_ALPHANUMEXT);
         $mform->setDefault('moduletype', '');
 
-        // Añadir el desplegable para las instancias del módulo (se actualizará dinámicamente)
+        // The dropdown for the module instances is added.
         $mform->addElement('select', 'moduleinstance', get_string('selectmodule', 'page'), []);
         $mform->setType('moduleinstance', PARAM_INT);
         $mform->disabledIf('moduleinstance', 'moduletype', 'eq', '');
-        // Contenedores para los módulos seleccionados.
+
+        // The container for the selected modules is added.
         $mform->addElement('static', 'selectedmodules', get_string('selectedmodules', 'page'), '<div id="selected-modules-container"></div>');
         $mform->addElement('static', 'selectedmodulenames', '', '<div id="selectedmodulenames"></div>');
         $mform->setType('selectedmodulenames', PARAM_TEXT);
         $mform->addElement('static', 'selectedmoduleids', '', '<div id="selectedmoduleids"></div>');
         $mform->setType('selectedmoduleids', PARAM_SEQUENCE); // Use PARAM_SEQUENCE for comma-separated integers.
 
-        // Añado el editor para poder escribir la ruta de aprendizaje elegida
+        // The editor is added to be able to write the learning path.
         $mform->addElement('editor', 'learningpath_editor', get_string('learningpath', 'page'), null, page_get_editor_options($this->context));
 
         //-------------------------------------------------------
