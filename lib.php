@@ -351,7 +351,7 @@ function page_get_file_info($browser, $areas, $course, $cm, $context, $filearea,
 
     $fs = get_file_storage();
 
-    // Manages the 'content' file area.
+    // Manages the 'content', 'learningpath' and 'relatedconcepts' file area.
     if ($filearea === 'content' || $filearea === 'learningpath' || $filearea === 'relatedconcepts') {
         $filepath = is_null($filepath) ? '/' : $filepath;
         $filename = is_null($filename) ? '.' : $filename;
@@ -399,7 +399,7 @@ function page_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
         return false;
     }
 
-    // Adds the check for the new file area 'learningpath' and 'relatedconcepts'.
+    // Adds the check for the new field areas, 'learningpath' and 'relatedconcepts' with the 'content' field area.
     if ($filearea !== 'content' && $filearea !== 'learningpath' && $filearea !== 'relatedconcepts') {
         return false;
     }
@@ -667,7 +667,7 @@ function page_view($page, $course, $cm, $context)
  */
 function page_check_updates_since(cm_info $cm, $from, $filter = array())
 {
-    // Incluyo 'learningpath' y 'relatedconcepts' junto con 'content' para la comprobación de actualizaciones.
+    // Includes 'learningpath' and 'relatedconcepts' along with 'content' for checking updates.
     $updates = course_check_module_updates_since($cm, $from, array('content', 'learningpath', 'relatedconcepts'), $filter);
     return $updates;
 }
