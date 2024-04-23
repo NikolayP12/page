@@ -11,18 +11,18 @@ Download it from:
 
     <https://github.com/NikolayP12/page.git>
 
-Once you have donwloaded it, log in to your Moodle site as an admin and go to \_Site administration > \_Plugins > \_Plugins overview and look for the Page plugin and uninstall it. For the uninstall process just follow the steps given by Moodle and the result will be correct. It is necessary to uninstall the original Moodle plugin because the plugin table will change, and to avoid future problems it is better to remove the previous plugin and then install the extended version plugin.
+Once you have downloaded it, log in to your Moodle site as an admin, navigate to \_Site administration > \_Plugins > \_Plugins overview, look for the Page plugin, and uninstall it. For the uninstall process just follow the steps given by Moodle and the result will be correct. It is necessary to uninstall the original Moodle plugin because the plugin table will change, and to avoid future problems it is better to remove the previous plugin and then install the extended version plugin.
 
 Once uninstalled, all you have to do is go to the following directory and paste the folder you downloaded/cloned from github:
 
     {your/moodle/dirroot}/mod/
 
-Afterwards, log in to your Moodle site as an admin and go to _Site administration >
-Notifications_ to complete the installation and follow the steps that Moodle provides for the correct installation.
+Afterwards, log in to your Moodle site as an admin and go to \_Site administration >
+Notifications\_ to complete the installation and follow the steps that Moodle provides for the correct installation.
 
 ## License
 
-This extension of the Moodle Page module is released under the GNU General Public License (GPLv3 or later), consistent with Moodle itself. This ensures that the extended module remains free and open source, and it can be freely used, modified, and distributed under the same terms as Moodle.
+This extension of the Moodle Page module is distributed under the GNU General Public License (GPLv3 or later), aligning with Moodle's licensing to ensure that it remains free and open source, and can be freely used, modified, and distributed under the same terms as Moodle itself.
 
 The GPLv3 license grants you the following freedoms:
 
@@ -51,8 +51,7 @@ Finally, a mail submission form for students has been created. This form can be 
 
 Once the plugin is installed, it is ideal to configure the mail sending section correctly before starting to create a page. Go to \_Site administration > \_Server > \_Outgoing mail configuration and configure the fields for SMTP. An example of using an Outlook email is as follows:
 
-- **SMTP hosts**: smtp.office365.com:587
-  Specify the port; if not specified, the plugin will default to port 587 by default.
+- **SMTP hosts**: smtp.office365.com:587 (Specify the port; if not specified, the plugin will default to port 587 by default)
 
 - **SMTP security**: TLS
 
@@ -62,7 +61,7 @@ Once the plugin is installed, it is ideal to configure the mail sending section 
 
 - **SMTP password**: passwordAccount
 
-With these settings, the proper functioning of sending emails to students would be ensured.
+These settings ensure that emails are sent correctly to students.
 
 ## Support
 
