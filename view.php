@@ -29,7 +29,6 @@ require_once($CFG->dirroot . '/mod/page/locallib.php');
 require_once($CFG->libdir . '/completionlib.php');
 
 global $PAGE;
-//$PAGE->requires->css(new moodle_url('/mod/page/page_style.css'));
 $PAGE->requires->css('/mod/page/page_style.css');
 
 $id      = optional_param('id', 0, PARAM_INT); // Course Module ID
@@ -84,13 +83,18 @@ echo $OUTPUT->header();
 $conceptTitle = get_string('concepttitle', 'page');
 echo $OUTPUT->heading($conceptTitle, 3);
 $content = file_rewrite_pluginfile_urls($page->content, 'pluginfile.php', $context->id, 'mod_page', 'content', $page->revision);
+
 $formatoptions = new stdClass;
 $formatoptions->noclean = true;
 $formatoptions->overflowdiv = true;
 $formatoptions->context = $context;
+$formatoptions->filter = false; // Disables the filters for the field 'content'.
+
 $content = format_text($content, $page->contentformat, $formatoptions);
 echo html_writer::div($content, 'box-style');
 //echo $OUTPUT->box($content, "generalbox center clearfix");
+
+$formatoptions->filter = true; // Enables the filters for the rest of the fields.
 
 // Insertion of the code that will show the related concepts.
 if (!empty($page->relatedconcepts)) {
@@ -137,6 +141,8 @@ foreach ($teachers as $teacher) {
     $teacherFullName = fullname($teacher);
     $teacherInfoString .= "• {$teacherFullName}: {$teacher->email}<br>";
 }
+
+$formatoptions->filter = false; // Disables the filters for the form.
 
 // Add a title for the form
 echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4, array('class' => 'space-between-style'));
