@@ -18,7 +18,7 @@ Once uninstalled, all you have to do is go to the following directory and paste 
     {your/moodle/dirroot}/mod/
 
 Afterwards, log in to your Moodle site as an admin and go to \_Site administration >
-Notifications\_ to complete the installation and follow the steps that Moodle provides for the correct installation.
+\_Notifications to complete the installation and follow the steps that Moodle provides for the correct installation.
 
 ## License
 
@@ -65,4 +65,4 @@ These settings ensure that emails are sent correctly to students.
 
 ## Support
 
-For questions or issues regarding the SQLab question type, please send an email to the plugin maintainer at nikolaypn2002@gmail.com.
+For questions or issues regarding the Page Module Extension, please send an email to the plugin maintainer at nikolaypn2002@gmail.com.
