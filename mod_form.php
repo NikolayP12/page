@@ -18,9 +18,10 @@
 /**
  * Page configuration form
  *
- * @package mod_page
- * @copyright  2009 Petr Skoda (http://skodak.org)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_page
+ * @copyright   2009 Petr Skoda (http://skodak.org)
+ * @copyright   2024 Nikolay <nikolaypn2002@gmail.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
@@ -31,6 +32,7 @@ require_once($CFG->libdir . '/filelib.php');
 global $COURSE;
 class mod_page_mod_form extends moodleform_mod
 {
+
     function definition()
     {
         global $CFG, $DB;
