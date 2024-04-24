@@ -22,6 +22,7 @@ if (!isloggedin() || isguestuser()) {
 
 $cm = get_coursemodule_from_id('page', $cmid, 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+$page = $DB->get_record('page', array('id' => $cm->instance), '*', MUST_EXIST);
 $context = context_module::instance($cmid);
 $PAGE->set_context($context);
 $PAGE->set_url('/mod/page/send_question.php', array('id' => $cmid));
@@ -32,9 +33,11 @@ if (data_submitted() && confirm_sesskey()) {
     $teacheremail = required_param('teacheremail', PARAM_EMAIL);
     $subject = required_param('subject', PARAM_TEXT);
     $messagebody = required_param('messagebody', PARAM_RAW);
-    $htmlMessageBody = nl2br($messagebody); // Convert line breaks to <br> for HTML.
+    $pageName = format_string($page->name);
+    $introMessage = get_string('emailfrompage', 'page', $pageName);
+    // Create full HTML message body
+    $htmlMessageBody = nl2br($introMessage . "<br><br>" . $messagebody);
 
-    // Obtain the user based on the email.
     $user = $DB->get_record('user', array('email' => $teacheremail));
 
     if ($user) {
@@ -74,7 +77,6 @@ if (data_submitted() && confirm_sesskey()) {
         $mail->Password = $CFG->smtppass;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = $smtpport; // Port SMTP.
-
         // Configures UTF-8 encoding.
         $mail->CharSet = 'UTF-8';
 
@@ -83,7 +85,7 @@ if (data_submitted() && confirm_sesskey()) {
         $mail->addAddress($teacheremail); // Add the teacher.
         $mail->addCC($USER->email); // Add the student in CC.
 
-        // Contents
+        // Email content
         $mail->isHTML(true); // Set email format to HTML.
         $mail->Subject = $subject;
         $mail->Body    = $htmlMessageBody;

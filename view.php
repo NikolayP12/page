@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -18,9 +17,10 @@
 /**
  * Page module version information
  *
- * @package mod_page
- * @copyright  2009 Petr Skoda (http://skodak.org)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_page
+ * @copyright   2009 Petr Skoda (http://skodak.org)
+ * @copyright   2024 Nikolay <nikolaypn2002@gmail.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require('../../config.php');
@@ -92,7 +92,6 @@ $formatoptions->filter = false; // Disables the filters for the field 'content'.
 
 $content = format_text($content, $page->contentformat, $formatoptions);
 echo html_writer::div($content, 'box-style');
-//echo $OUTPUT->box($content, "generalbox center clearfix");
 
 $formatoptions->filter = true; // Enables the filters for the rest of the fields.
 
