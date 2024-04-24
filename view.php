@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Page module version information
+ * View.php where the fields of the Page module are displayed
  *
  * @package     mod_page
  * @copyright   2009 Petr Skoda (http://skodak.org)
@@ -31,10 +31,12 @@ require_once($CFG->libdir . '/completionlib.php');
 global $PAGE;
 $PAGE->requires->css('/mod/page/page_style.css');
 
-$id      = optional_param('id', 0, PARAM_INT); // Course Module ID
-$p       = optional_param('p', 0, PARAM_INT);  // Page instance ID
+// Retrieve the Course Module ID and Page instance ID from the request.
+$id      = optional_param('id', 0, PARAM_INT);
+$p       = optional_param('p', 0, PARAM_INT);
 $inpopup = optional_param('inpopup', 0, PARAM_BOOL);
 
+// Load the page object or course module based on the provided ID.
 if ($p) {
     if (!$page = $DB->get_record('page', array('id' => $p))) {
         throw new \moodle_exception('invalidaccessparameter');
@@ -49,22 +51,25 @@ if ($p) {
 
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 
+// Ensure the user is logged in and has the necessary capabilities.
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 require_capability('mod/page:view', $context);
 
-// Completion and trigger events.
+// Handle view actions such as logging and triggering events.
 page_view($page, $course, $cm, $context);
 
+// Set up the page URL and layout
 $PAGE->set_url('/mod/page/view.php', array('id' => $cm->id));
 
+// Deserialize display options if set
 $options = empty($page->displayoptions) ? [] : (array) unserialize_array($page->displayoptions);
 
 $activityheader = ['hidecompletion' => false];
 if (empty($options['printintro'])) {
     $activityheader['description'] = '';
 }
-
+// Configure the page layout based on display settings
 if ($inpopup and $page->display == RESOURCELIB_DISPLAY_POPUP) {
     $PAGE->set_pagelayout('popup');
     $PAGE->set_title($course->shortname . ': ' . $page->name);
@@ -78,8 +83,12 @@ if ($inpopup and $page->display == RESOURCELIB_DISPLAY_POPUP) {
         $activityheader['title'] = "";
     }
 }
+
 $PAGE->activityheader->set_attrs($activityheader);
+// Output the page header.
 echo $OUTPUT->header();
+
+// Display the page content.
 $conceptTitle = get_string('concepttitle', 'page');
 echo $OUTPUT->heading($conceptTitle, 3);
 $content = file_rewrite_pluginfile_urls($page->content, 'pluginfile.php', $context->id, 'mod_page', 'content', $page->revision);
@@ -95,7 +104,7 @@ echo html_writer::div($content, 'box-style');
 
 $formatoptions->filter = true; // Enables the filters for the rest of the fields.
 
-// Insertion of the code that will show the related concepts.
+// Display related concepts if available
 if (!empty($page->relatedconcepts)) {
     $relatedconceptsTitle = get_string('relatedconceptstitle', 'page');
     echo $OUTPUT->heading($relatedconceptsTitle, 3, array('class' => 'space-between-style'));
@@ -104,7 +113,7 @@ if (!empty($page->relatedconcepts)) {
     echo html_writer::div($relatedconceptscontent, 'box-style');
 }
 
-// Insertion of the code to display the content of the learning path.
+// Display learning path if available
 if (!empty($page->learningpath)) {
     $learningPathTitle = get_string('learningpathtitle', 'page');
     echo $OUTPUT->heading($learningPathTitle, 3, array('class' => 'space-between-style'));
@@ -131,9 +140,7 @@ $sql = "SELECT DISTINCT u.id, u.firstname, u.lastname, u.email,
         AND r.shortname IN ($placeholders)";
 
 $params = array_merge([CONTEXT_COURSE, $course->id], $teacherRoles);
-
 $teachers = $DB->get_records_sql($sql, $params);
-
 // Convert the results into a comma-separated string of emails.
 $teacherInfoString = '';
 foreach ($teachers as $teacher) {
@@ -143,12 +150,10 @@ foreach ($teachers as $teacher) {
 
 $formatoptions->filter = false; // Disables the filters for the form.
 
-// Add a title for the form
+// Display the email form
 echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4, array('class' => 'space-between-style'));
 echo '<script src="' . new moodle_url('/mod/page/accordion.js') . '"></script>';
-// Accordion container begins.
 echo '<div class="accordion-container">';
-// This is the title of the accordion, which users can click to expand or collapse the content.
 echo '<h2 class="accordion-title">' . get_string('dropdownform', 'page') . '</h2>';
 echo '<div class="accordion-content">';
 echo '<form action="send_question.php" method="post" class="custom-question-form">';
@@ -172,11 +177,10 @@ echo '<textarea id="messagebody" name="messagebody" rows="10" required></textare
 echo '</div>';
 echo '<button type="submit">' . get_string('send', 'page') . '</button>';
 echo '</form>';
-// Closes the content and the chord container.
 echo '</div>'; // Closing .accordion-content
 echo '</div>'; // Closing .accordion-container
 
-
+// Display last modified date if required
 if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'])) {
     $strlastmodified = get_string("lastmodified");
     echo html_writer::div("$strlastmodified: " . userdate($page->timemodified), 'modified');
