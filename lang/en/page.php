@@ -77,6 +77,13 @@ $string['search:activity'] = 'Page';
 $string['printheading'] = 'Display page name';
 $string['printheadingexplain'] = 'Display page name above content?';
 
+//Help strings for the editor text fields
+$string['conceptshelp'] = 'In this field you can write the concepts related to the content of the page.';
+$string['conceptshelp_help'] = 'In this field you can write the concepts related to the content of the page.';
+$string['moduletypehelp'] = 'In this field you can recommend which modules the students should review, you can know which ones are present in the course based on the modules shown in the dropdown and can be filtered by module type.';
+$string['moduletypehelp_help'] = 'This dropdown can be used to display the modules present in the course based on their type. In the text field you can detail the modules that students should review to understand the content displayed on the page.';
+//$string['learningpath_editor_help'] = 'In this field you can recommend which modules the students should review, you can know which ones are present in the course based on the modules shown in the dropdown and can be filtered by module type.';
+
 //Strings for the editor text fields 
 $string['learningpathheader'] = 'Learning path';
 $string['learningpath'] = 'Learning path';

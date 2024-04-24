@@ -77,6 +77,12 @@ $string['search:activity'] = 'Page';
 $string['printheading'] = 'Display page name';
 $string['printheadingexplain'] = 'Display page name above content?';
 
+//Help strings for the editor text fields
+$string['conceptshelp'] = 'En este campo puede escribir los conceptos relacionados con el contenido de la página.';
+$string['conceptshelp_help'] = 'En este campo puede escribir los conceptos relacionados con el contenido de la página.';
+$string['moduletypehelp'] = 'Este desplegable puede utilizarlo para visualizar los módulos del curso según su tipo. En el campo de texto, puede especificar los módulos que los alumnos deben revisar para comprender el contenido presentado en la página';
+$string['moduletypehelp_help'] = 'Este desplegable puede utilizarlo para visualizar los módulos del curso según su tipo. En el campo de texto, puede especificar los módulos que los alumnos deben revisar para comprender el contenido presentado en la página';
+
 //Strings for the editor text fields 
 $string['learningpathheader'] = 'Ruta de Aprendizaje';
 $string['learningpath'] = 'Ruta de Aprendizaje';
