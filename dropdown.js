@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
-* JavaScript logic for dynamically updating module instance dropdown
+ * JavaScript logic for dynamically updating module instance dropdown
  * based on selected module type and managing selected modules list.
  * 
  * @package     mod_page
