@@ -80,7 +80,6 @@ $string['printheadingexplain'] = 'Display page name above content?';
 //Strings for the editor text fields 
 $string['learningpathheader'] = 'Learning path';
 $string['learningpath'] = 'Learning path';
-
 $string['relatedconceptsheader'] = 'Related concepts';
 $string['relatedconcepts'] = 'Related concepts';
 
@@ -105,7 +104,7 @@ $string['teacheremailnotvalid'] = 'The teacher mail you have provided it is not 
 $string['invalidformdata'] = 'Invalid form data';
 $string['emailfrompage'] = 'This email is from the page: {$a}';
 
-// Strings for the drop down
+// Strings for the drop-down
 $string['moduletype'] = 'Module type';
 $string['selectmodule'] = 'Select module';
 $string['selecttype'] = 'Select a type';

@@ -80,7 +80,6 @@ $string['printheadingexplain'] = 'Display page name above content?';
 //Strings for the editor text fields 
 $string['learningpathheader'] = 'Ruta de Aprendizaje';
 $string['learningpath'] = 'Ruta de Aprendizaje';
-
 $string['relatedconceptsheader'] = 'Conceptos Relacionados';
 $string['relatedconcepts'] = 'Conceptos Relacionados';
 
@@ -105,7 +104,7 @@ $string['teacheremailnotvalid'] = 'El correo del profesor que ha facilitado no e
 $string['invalidformdata'] = 'Datos de formulario no válidos';
 $string['emailfrompage'] = 'Este correo electrónico proviene de la página: {$a}';
 
-// Strings para el desplegable
+// Strings for the drop-down
 $string['moduletype'] = 'Tipo de módulo';
 $string['selectmodule'] = 'Seleccione el módulo';
 $string['selecttype'] = 'Seleccione el tipo';
