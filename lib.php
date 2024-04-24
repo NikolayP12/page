@@ -16,6 +16,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Handles module integration with the rest of the Moodle system.
+ * 
  * @package     mod_page
  * @copyright   2009 Petr Skoda (http://skodak.org)
  * @copyright   2024 Nikolay <nikolaypn2002@gmail.com>

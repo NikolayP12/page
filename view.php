@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * View.php where the fields of the Page module are displayed
+ * Handles where and how the fields of the Page module are displayed
  *
  * @package     mod_page
  * @copyright   2009 Petr Skoda (http://skodak.org)

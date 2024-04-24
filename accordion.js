@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * JavaScript logic for dynamically expand the email form
+ * JavaScript logic for dynamically expand the email form.
  * 
  * @package     mod_page
  * @copyright   2024 Nikolay <nikolaypn2002@gmail.com>

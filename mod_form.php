@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Page configuration form
+ * Handles the page mod_form, where the page is configured.
  *
  * @package     mod_page
  * @copyright   2009 Petr Skoda (http://skodak.org)
