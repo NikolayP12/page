@@ -102,7 +102,6 @@ class mod_page_mod_form extends moodleform_mod
 
         // The editor is added to be able to write the learning path.
         $mform->addElement('editor', 'learningpath_editor', get_string('learningpath', 'page'), null, page_get_editor_options($this->context));
-        //$mform->addHelpButton('learningpath_editor', 'learningpath_editor', 'page');
 
         //-------------------------------------------------------
         $mform->addElement('header', 'appearancehdr', get_string('appearance'));

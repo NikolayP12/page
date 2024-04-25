@@ -63,10 +63,12 @@ document.addEventListener('DOMContentLoaded', function () {
                             moduleInstanceSelect.add(option);
                         });
                     } else {
+                        alert('Invalid format received from server.');
                         console.error('Invalid response format:', data);
                     }
                 })
                 .catch(error => {
+                    alert(error.message);
                     console.error('Error fetching activities:', error);
                 });
         }
