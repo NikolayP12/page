@@ -109,7 +109,7 @@ $string['emailsent'] = 'Mensaje enviado';
 $string['emailsenderror'] = 'Error al enviar el correo electrónico.';
 $string['teacheremailnotvalid'] = 'El correo del profesor que ha facilitado no es válido.';
 $string['invalidformdata'] = 'Datos de formulario no válidos';
-$string['emailfrompage'] = 'Este correo electrónico proviene de la página: {$a}';
+$string['emailfrompage'] = 'Este correo electrónico proviene de la página: ';
 
 // Strings for the drop-down
 $string['moduletype'] = 'Tipo de módulo';

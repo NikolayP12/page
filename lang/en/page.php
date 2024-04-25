@@ -109,7 +109,7 @@ $string['emailsent'] = 'Mail sent';
 $string['emailsenderror'] = 'Error sending the email';
 $string['teacheremailnotvalid'] = 'The teacher mail you have provided it is not valid';
 $string['invalidformdata'] = 'Invalid form data';
-$string['emailfrompage'] = 'This email is from the page: {$a}';
+$string['emailfrompage'] = 'This email is from the page: ';
 
 // Strings for the drop-down
 $string['moduletype'] = 'Module type';

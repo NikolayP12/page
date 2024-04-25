@@ -62,10 +62,11 @@ if (data_submitted() && confirm_sesskey()) {
     $subject = required_param('subject', PARAM_TEXT);
     $messagebody = required_param('messagebody', PARAM_RAW);
     $pageName = format_string($page->name);
-    $introMessage = get_string('emailfrompage', 'page', $pageName);
+    $headerMessage = get_string('emailfrompage', 'page');
+    $introMessage = "<strong>" . nl2br($headerMessage) . "</strong>" .  nl2br($pageName);
 
     // Constructs the full HTML message body.
-    $htmlMessageBody = nl2br($introMessage . "<br><br>" . $messagebody);
+    $htmlMessageBody = "<em>" . nl2br($introMessage) . "</em><br><br>" . nl2br($messagebody);
 
     // Attempts to retrieve user details based on the provided email address.   
     $user = $DB->get_record('user', array('email' => $teacheremail));
