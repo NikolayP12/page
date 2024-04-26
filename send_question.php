@@ -40,7 +40,7 @@ require_login();
 $cmid = required_param('id', PARAM_INT);
 
 if (!isloggedin() || isguestuser()) {
-    $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+    $url = new moodle_url('/mod/page/view.php', array('id' => $cmid, 'emailSent' => 'false'));
     redirect($url, get_string('nopermissions', 'page'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
@@ -85,12 +85,12 @@ if (data_submitted() && confirm_sesskey()) {
 
         if (empty($isTeacher) || !isset($isTeacher->roleid)) {
             // Redirect with an error message if the user is not a teacher.
-            $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+            $url = new moodle_url('/mod/page/view.php', array('id' => $cmid, 'emailSent' => 'false'));
             redirect($url, get_string('teacheremailnotvalid', 'page'), null, \core\output\notification::NOTIFY_ERROR);
         }
     } else {
         // Redirect with an error message if no user with the provided email was found.
-        $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+        $url = new moodle_url('/mod/page/view.php', array('id' => $cmid, 'emailSent' => 'false'));
         redirect($url, get_string('teacheremailnotvalid', 'page'), null, \core\output\notification::NOTIFY_ERROR);
     }
 
@@ -125,14 +125,14 @@ if (data_submitted() && confirm_sesskey()) {
 
         // Sends the email and redirects to the view page with a success notification.
         $mail->send();
-        redirect(new moodle_url('/mod/page/view.php', array('id' => $cmid)), get_string('emailsent', 'page'), null, \core\output\notification::NOTIFY_SUCCESS);
+        redirect(new moodle_url('/mod/page/view.php', array('id' => $cmid, 'emailSent' => 'true')), get_string('emailsent', 'page'), null, \core\output\notification::NOTIFY_SUCCESS);
     } catch (Exception $e) {
         // On mail error, redirect back to the view page with an error notification.
-        $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+        $url = new moodle_url('/mod/page/view.php', array('id' => $cmid, 'emailSent' => 'false'));
         redirect($url, get_string('emailsenderror', 'page'), null, \core\output\notification::NOTIFY_ERROR);
     }
 } else {
     // Redirect with a notification for invalid form data.
-    $url = new moodle_url('/mod/page/view.php', array('id' => $cmid));
+    $url = new moodle_url('/mod/page/view.php', array('id' => $cmid, 'emailSent' => 'false'));
     redirect($url, get_string('invalidformdata', 'page'), null, \core\output\notification::NOTIFY_ERROR);
 }

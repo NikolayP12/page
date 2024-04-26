@@ -28,7 +28,7 @@ require_once($CFG->dirroot . '/mod/page/lib.php');
 require_once($CFG->dirroot . '/mod/page/locallib.php');
 require_once($CFG->libdir . '/completionlib.php');
 
-global $PAGE;
+global $PAGE, $USER;
 $PAGE->requires->css('/mod/page/page_style.css');
 
 // Retrieve the Course Module ID and Page instance ID from the request.
@@ -153,12 +153,16 @@ $formatoptions->filter = false; // Disables the filters for the form.
 // Display the email form
 echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4, array('class' => 'space-between-style'));
 echo '<script src="' . new moodle_url('/mod/page/accordion.js') . '"></script>';
+echo '<script src="' . new moodle_url('/mod/page/form_storage.js') . '"></script>';
+
 echo '<div class="accordion-container">';
 echo '<h2 class="accordion-title">' . get_string('dropdownform', 'page') . '</h2>';
 echo '<div class="accordion-content">';
 echo '<form action="send_question.php" method="post" class="custom-question-form">';
 echo '<input type="hidden" name="sesskey" value="' . s(sesskey()) . '"/>';
 echo '<input type="hidden" name="id" value="' . $cm->id . '"/>';
+echo '<input type="hidden" id="pageid" name="pageid" value="' . $id . '"/>';
+echo '<input type="hidden" id="userid" name="userid" value="' . $USER->id . '"/>';
 echo '<div>';
 echo '<label for="teachersemails">' . get_string('availableteachers', 'page') . '</label>';
 echo '<p class="teacheremails">' . $teacherInfoString . '</p>';
@@ -185,5 +189,4 @@ if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'
     $strlastmodified = get_string("lastmodified");
     echo html_writer::div("$strlastmodified: " . userdate($page->timemodified), 'modified');
 }
-
 echo $OUTPUT->footer();
