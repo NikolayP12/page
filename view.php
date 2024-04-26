@@ -158,7 +158,7 @@ echo '<script src="' . new moodle_url('/mod/page/form_storage.js') . '"></script
 echo '<div class="accordion-container">';
 echo '<h2 class="accordion-title">' . get_string('dropdownform', 'page') . '</h2>';
 echo '<div class="accordion-content">';
-echo '<form action="send_question.php" method="post" class="custom-question-form">';
+echo '<form action="send_question.php" method="post" class="custom-question-form clearfix">';
 echo '<input type="hidden" name="sesskey" value="' . s(sesskey()) . '"/>';
 echo '<input type="hidden" name="id" value="' . $cm->id . '"/>';
 echo '<input type="hidden" id="pageid" name="pageid" value="' . $id . '"/>';
@@ -179,7 +179,9 @@ echo '<div>';
 echo '<label for="messagebody">' . get_string('messagebody', 'page') . '</label>';
 echo '<textarea id="messagebody" name="messagebody" rows="10" required></textarea>';
 echo '</div>';
+echo '<div class = "button-container">';
 echo '<button type="submit">' . get_string('send', 'page') . '</button>';
+echo '</div>';
 echo '</form>';
 echo '</div>'; // Closing .accordion-content
 echo '</div>'; // Closing .accordion-container
