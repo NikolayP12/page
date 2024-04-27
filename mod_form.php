@@ -37,7 +37,7 @@ class mod_page_mod_form extends moodleform_mod
     {
         global $CFG, $DB;
         global $PAGE;
-        $PAGE->requires->js(new moodle_url('/mod/page/dropdown.js'));
+        $PAGE->requires->js(new moodle_url('/mod/page/javascript/dropdown.js'));
         $PAGE->requires->css('/mod/page/page_style.css');
 
         $mform = $this->_form;

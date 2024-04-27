@@ -152,8 +152,8 @@ $formatoptions->filter = false; // Disables the filters for the form.
 
 // Display the email form
 echo $OUTPUT->heading(get_string('sendyourquestion', 'page'), 4, array('class' => 'space-between-style'));
-echo '<script src="' . new moodle_url('/mod/page/accordion.js') . '"></script>';
-echo '<script src="' . new moodle_url('/mod/page/form_storage.js') . '"></script>';
+echo '<script src="' . new moodle_url('/mod/page/javascript/accordion.js') . '"></script>';
+echo '<script src="' . new moodle_url('/mod/page/javascript/form_storage.js') . '"></script>';
 
 echo '<div class="accordion-container">';
 echo '<h2 class="accordion-title">' . get_string('dropdownform', 'page') . '</h2>';
