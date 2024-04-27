@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_page';    // Full name of the plugin (used for diagnostics).
-$plugin->release   = '1.3.5';       // Version release of the plugin.
+$plugin->release   = '1.4.0';       // Version release of the plugin.
 $plugin->version   = 2023100900;    // The current module version (Date: YYYYMMDDXX).
 $plugin->requires  = 2023100400;    // Requires this Moodle version.
 $plugin->cron      = 0;
