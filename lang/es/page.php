@@ -131,6 +131,7 @@ $string['mod_h5p'] = 'H5P';
 $string['mod_lesson'] = 'Lesson';
 $string['mod_page'] = 'Page';
 $string['mod_quiz'] = 'Quiz';
+$string['mod_sqlab'] = 'SQLab';
 $string['mod_scorm'] = 'SCORM package';
 $string['mod_survey'] = 'Survey';
 $string['mod_url'] = 'URL';
